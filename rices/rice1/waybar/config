@@ -1,0 +1,103 @@
+{
+  "layer": "top",
+  "exclusive": true,
+  "position": "top",
+  "modules-left": ["custom/launcher","hyprland/workspaces", "mpd", "hyprland/submap","custom/bluetooth","cpu", "battery","custom/swaync"],
+  "modules-center": ["custom/message"],
+  "modules-right": ["network", "pulseaudio", "temperature", "memory", "clock","tray"],
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": []
+    }
+  },
+
+  "hyprland/submap": {
+    "format": "🔀 {submap}"
+  },
+
+  "mpd": {
+    "tooltip": false,
+    "format": "{stateIcon} {artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S})",
+    "format-disconnected": "ﳌ",
+    "format-stopped": "",
+    "state-icons": {
+      "playing": "",
+      "paused": ""
+    }
+  },
+
+  "pulseaudio": {
+      "format": "{icon} {volume}%",
+      "format-icons": [""],
+      "on-click": "pavucontrol",
+      "tooltip": false
+    },
+  "network": {
+    "tooltip": false,
+    "format-wifi": "   {essid}",
+    "format-ethernet": " {ipaddr}",
+    "format-disconnected": "⚠️ Disconnected",
+    "on-click": "nm-applet"
+  },
+
+  "cpu": {
+    "tooltip": false,
+    "format": "💻 {}%"
+  },
+
+  "memory": {
+    "tooltip": false,
+    "format": " {}%"
+  },
+
+  "temperature": {
+    "critical-threshold": 75,
+    "format": "🌡️ {temperatureC}°C",
+    "format-critical": "🔥 {temperatureC}°C"
+  },
+
+  "clock": {
+  "format": "{:%H:%M 📅 %d/%m/%Y}",
+  "tooltip": true
+  },
+  "custom/message": {
+    "format": "Welcome Dhruv",
+    "tooltip": false
+  },
+  "custom/bluetooth": {
+    "format": "{}",
+    "exec": "~/.config/waybar/scripts/bluetooth_status.sh",
+    "on-click": "~/.config/waybar/scripts/bluetooth_toggle.sh",
+    "on-click-right": "blueman-manager",
+    "interval": 5
+  },
+  "custom/launcher": {
+    "format": "Start",
+    "tooltip": false,
+    "on-click": "~/.config/waybar/scripts/toggle-sidebar.sh",
+    "class": "launcher"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "🔋 {capacity}%",
+    "format-charging": "⚡ {capacity}%",
+    "format-plugged": "🔌 {capacity}%"
+  },
+  "custom/swaync": {
+    "format": "{icon}",
+    "exec": "swaync-client -swb",
+    "return-type": "json",
+    "interval": 0,
+    "on-click": "swaync-client -t"
+   },
+}

@@ -1,0 +1,250 @@
+/* GLOBAL STYLE */
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    min-height: 24px;
+    opacity: 0.95;
+}
+
+window#waybar {
+    background: rgba(20, 20, 25, 0);
+}
+
+#waybar {
+    box-shadow: 0px 4px 18px rgba(255,255,255,.8);
+}
+
+/* ============================
+   COLOR PALETTE (3 colors)
+   ----------------------------
+   Primary Blue:   #7aa2f7
+   Soft Silver:    #cdd6f4
+   Light Neutral:  #e5e9f0
+===============================*/
+
+/* WINDOW INDICATOR (APP NAME) */
+#window {
+    margin-top: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    transition: none;
+    color: #e5e9f0;
+    background: rgba(0, 0, 0, .8);
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+window#waybar.termite #window,
+window#waybar.Firefox #window,
+window#waybar.Navigator #window,
+window#waybar.PCSX2 #window {
+    background: rgba(0,0,0,.8);
+    color: #cdd6f4;
+}
+
+
+/* WORKSPACES */
+#workspaces {
+    margin-top: 8px;
+    margin-left: 12px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+#workspaces button {
+    color: #e5e9f0;
+    background: transparent;
+}
+
+#workspaces button.focused {
+    color: #7aa2f7;
+}
+
+#workspaces button:hover {
+    color: #cdd6f4;
+}
+
+
+/* MPD / MUSIC */
+#mpd {
+    margin-top: 8px;
+    margin-right: 8px;
+    margin-left: 4px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #7aa2f7;
+    box-shadow: 0 0 6px rgba(122,162,247,0.45);
+}
+#tray {
+    margin-top: 8px;
+    margin-left: 2px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #7aa2f7;
+    box-shadow: 0 0 6px rgba(122,162,247,0.45);
+}
+#mpd.disconnected,
+#mpd.stopped {
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+}
+
+
+/* NETWORK */
+#network {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* AUDIO */
+#pulseaudio {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #7aa2f7;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* TEMPERATURE */
+#temperature {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #cdd6f4;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* CPU */
+#cpu {
+    font-family: "Symbols Nerd Font", "Roboto", monospace;
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* MEMORY */
+#memory,#swaync {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #cdd6f4;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* CLOCK */
+#clock {
+    margin: 8px 2px 2px 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background:rgba(0,0,0,.8);
+    color: #e5e9f0;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* CUSTOM MESSAGE */
+#custom-message {
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+    padding: 0 16px;
+    margin-top: 8px;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* BLUETOOTH */
+#custom-bluetooth {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #7aa2f7;
+    font-weight: bold;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+
+/* LAUNCHER */
+#custom-launcher {
+    margin: 8px 8px 0 8px;
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+    border-radius: 26px;
+    padding: 0 16px;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background 0.3s ease;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+#custom-launcher:hover {
+    background: rgba(0,0,0,.8);
+}
+
+
+/* BATTERY */
+#battery {
+    margin-top: 8px;
+    margin-left: 8px;
+    padding: 0 16px;
+    border-radius: 26px;
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+    font-weight: bold;
+    border: 1px solid #6b7fa8;
+    box-shadow: 0 0 6px rgba(122,162,247,0.55);
+}
+
+#battery.charging {
+    background: rgba(0,0,0,.8);
+    color: #7aa2f7;
+}
+
+#battery.warning {
+    background: rgba(0,0,0,.8);
+    color: #cdd6f4;
+}
+
+#battery.critical {
+    background: rgba(0,0,0,.8);
+    color: #e5e9f0;
+}

@@ -1,0 +1,205 @@
+@import url("./matugen/colors.css");
+
+/* ===========================
+ * Global Defaults
+ * =========================== */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    min-height: 30px;
+    opacity: 0.96;
+    color: @on_surface;
+}
+
+window#waybar {
+    background: rgba(0, 0, 0, 0);
+}
+
+#waybar {
+    box-shadow: 0px 6px 22px alpha(@primary, 0.30);
+}
+
+/* ===========================
+ * Shared Container Style
+ * =========================== */
+
+#window,
+#workspaces,
+#mpd,
+#tray,
+#network,
+#pulseaudio,
+#temperature,
+#cpu,
+#memory,
+#swaync,
+#clock,
+#battery,
+#custom-message,
+#custom-bluetooth,
+#custom-launcher {
+    background:
+            linear-gradient(
+                    alpha(@primary, 0.14),
+                    alpha(@primary, 0.14)
+            ),
+            alpha(@surface_container, 0.96);
+
+    color: @on_surface;
+    padding: 0 16px;
+    margin-top: 8px;
+    border-radius: 26px;
+
+    border: 1px solid alpha(@primary, 0.55);
+
+    transition:
+            background 350ms ease,
+            box-shadow 350ms ease,
+            color 200ms ease;
+}
+
+/* ===========================
+ * Window Title
+ * =========================== */
+
+#window {
+    margin-left: 12px;
+    margin-right: 8px;
+}
+
+window#waybar.termite #window,
+window#waybar.Firefox #window,
+window#waybar.Navigator #window,
+window#waybar.PCSX2 #window {
+    background:
+            linear-gradient(
+                    alpha(@primary_container, 0.35),
+                    alpha(@primary_container, 0.35)
+            ),
+            alpha(@surface_container, 0.92);
+
+    color: @on_primary_container;
+}
+
+/* ===========================
+ * Workspaces
+ * =========================== */
+
+#workspaces {
+    margin-left: 12px;
+}
+
+#workspaces button {
+    background: transparent;
+    color: @on_surface;
+    padding: 0 8px;
+}
+
+#workspaces button.focused {
+    color: @on_primary;
+    text-shadow: 0 0 6px alpha(@primary, 0.65);
+}
+
+#workspaces button:hover {
+    color: @primary;
+}
+
+/* ===========================
+ * Module Spacing
+ * =========================== */
+
+#mpd,
+#tray {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+#network,
+#pulseaudio,
+#temperature,
+#cpu,
+#memory,
+#swaync,
+#battery,
+#custom-bluetooth {
+    margin-left: 8px;
+}
+
+#clock {
+    margin: 8px 2px 2px 8px;
+}
+
+#custom-message {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#custom-launcher {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 8px 0 8px;
+}
+
+/* ===========================
+ * Hover Effects
+ * =========================== */
+
+#custom-launcher:hover,
+#workspaces button:hover {
+    background:
+            linear-gradient(
+                    alpha(@primary, 0.38),
+                    alpha(@primary, 0.38)
+            ),
+            alpha(@surface_container_high, 0.96);
+
+    color: @on_primary;
+}
+
+/* ===========================
+ * Fonts
+ * =========================== */
+
+#cpu {
+    font-family: "Symbols Nerd Font", "Roboto", monospace;
+}
+
+/* ===========================
+ * Battery States
+ * =========================== */
+
+#battery.charging {
+    color: @primary;
+}
+
+#battery.warning {
+    color: @tertiary;
+}
+
+#battery.critical {
+    color: @error;
+}
+
+/* ===========================
+ * Metallic Block (Optional)
+ * =========================== */
+
+.metallic-block {
+    background:
+            linear-gradient(
+                    alpha(@primary_container, 0.40),
+                    alpha(@primary_container, 0.40)
+            ),
+            alpha(@surface_container, 0.92);
+
+    color: @on_primary_container;
+
+    border: 1px solid alpha(@outline, 0.85);
+
+    box-shadow:
+            0 0 0 1px alpha(@outline, 0.8),
+            0 6px 16px alpha(@primary, 0.55);
+}

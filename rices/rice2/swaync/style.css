@@ -1,0 +1,221 @@
+@import url("./matugen/colors.css");
+
+/* ==========================================================
+   GLOBAL
+========================================================== */
+
+* {
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    color: @on_surface_fixed;
+    border: none;
+    cursor: pointer;
+}
+
+/* Animation */
+@keyframes slide-in {
+    0% {
+        opacity: 0;
+        transform: translateX(20px) translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0);
+    }
+}
+
+/* ==========================================================
+   MAIN WINDOW
+========================================================== */
+
+window {
+    background:
+            linear-gradient(
+                    alpha(@surface_container_low, 0.75),
+                    alpha(@surface_container_low, 0.75)
+            ),
+            alpha(@surface_tint, 0.45);
+
+    border: 1px solid alpha(@outline, 0.85);
+    border-radius: 24px;
+    padding: 12px;
+
+    box-shadow:
+            0 0 22px alpha(@primary, 0.45),
+            0 0 40px alpha(@primary, 0.25);
+
+    animation: slide-in 0.25s ease-out;
+}
+
+/* ==========================================================
+   NOTIFICATION CARD
+========================================================== */
+
+.notification {
+    background:
+            linear-gradient(
+                    alpha(@surface_container, 0.75),
+                    alpha(@surface_container, 0.75)
+            ),
+            alpha(@surface_tint, 0.4);
+
+    border: 1px solid alpha(@outline, 0.8);
+    border-radius: 22px;
+
+    margin: 10px;
+    padding: 14px;
+
+    box-shadow:
+            0 0 14px alpha(@primary, 0.35),
+            0 0 30px alpha(@primary, 0.20);
+
+    animation: slide-in 0.25s ease-out;
+}
+
+/* Icons */
+.notification .image,
+.notification .icon {
+    border-radius: 14px;
+    margin-right: 14px;
+    min-width: 48px;
+    min-height: 48px;
+
+    box-shadow: 0 0 10px alpha(@primary, 0.35);
+}
+
+/* App name */
+.notification .app-name {
+    font-size: 14px;
+    color: @on_surface_variant;
+}
+
+/* Title */
+.notification .summary {
+    font-size: 18px;
+    font-weight: bold;
+    color: @primary_fixed;
+    text-shadow: 0 0 6px alpha(@primary, 0.55);
+}
+
+/* Body text */
+.notification .body {
+    color: @on_surface_fixed;
+    margin-top: 6px;
+}
+
+/* Time */
+.notification .time {
+    color: @on_surface_variant;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* ==========================================================
+   ACTION BUTTONS
+========================================================== */
+
+.notification button {
+    background:
+            linear-gradient(
+                    alpha(@surface_container_high, 0.8),
+                    alpha(@surface_container_high, 0.8)
+            ),
+            alpha(@surface_tint, 0.35);
+
+    border-radius: 18px;
+    padding: 6px 14px;
+    margin: 8px 4px 0 4px;
+
+    color: @on_surface_fixed;
+    border: 1px solid alpha(@outline, 0.8);
+
+    transition: 0.2s ease;
+}
+
+.notification button:hover {
+    background: alpha(@primary_container, 0.85);
+    color: @on_primary_container;
+
+    box-shadow: 0 0 10px alpha(@primary, 0.55);
+}
+
+/* ==========================================================
+   CONTROL CENTER PANEL
+========================================================== */
+
+.control-center {
+    background:
+            linear-gradient(
+                    alpha(@surface_container_low, 0.75),
+                    alpha(@surface_container_low, 0.75)
+            ),
+            alpha(@surface_tint, 0.45);
+
+    border: 1px solid alpha(@outline, 0.85);
+    border-radius: 24px;
+    padding: 14px;
+
+    box-shadow:
+            0 0 22px alpha(@primary, 0.45),
+            0 0 40px alpha(@primary, 0.25);
+}
+
+.control-center .header {
+    font-size: 20px;
+    font-weight: bold;
+    color: @primary_fixed;
+
+    padding-bottom: 6px;
+    text-shadow: 0 0 8px alpha(@primary, 0.45);
+}
+
+/* Buttons inside control center */
+.control-center button {
+    background:
+            linear-gradient(
+                    alpha(@surface_container_high, 0.8),
+                    alpha(@surface_container_high, 0.8)
+            ),
+            alpha(@surface_tint, 0.35);
+
+    border: 1px solid alpha(@outline, 0.8);
+    border-radius: 20px;
+
+    padding: 6px 12px;
+    color: @on_surface_fixed;
+    margin: 4px;
+
+    transition: 0.2s ease;
+}
+
+.control-center button:hover {
+    background: alpha(@primary_container, 0.85);
+    color: @on_primary_container;
+
+    box-shadow: 0 0 10px alpha(@primary, 0.55);
+}
+
+/* ==========================================================
+   PROGRESS BARS
+========================================================== */
+
+progressbar trough {
+    background: alpha(@outline, 0.25);
+    border-radius: 8px;
+    min-height: 8px;
+}
+
+progressbar progress {
+    background: @primary;
+    border-radius: 8px;
+}
+
+/* ==========================================================
+   TOAST MODE
+========================================================== */
+
+#swaync-notification-row {
+    padding: 6px;
+    animation: slide-in 0.25s ease-out;
+}

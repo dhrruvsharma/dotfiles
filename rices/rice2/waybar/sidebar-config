@@ -1,0 +1,195 @@
+{
+  "layer": "overlay",
+  "exclusive": false,
+  "position": "left",
+  "width": 260,
+  "margin": 10,
+  "modules-left": [
+    "custom/profile",
+    "custom/motto",
+    "custom/motto2",
+    "custom/social_label",
+    "group/socials",
+    "group/socials2",
+    "custom/divider2",
+    "group/coding",
+    "custom/fun_label",
+    "group/fun",
+    "group/fun2",
+    "custom/divider2",
+    "group/dev",
+  ],
+
+  "custom/profile": {
+    "format": " ",
+    "tooltip": false,
+    "interval": 999999
+  },
+
+  "custom/discord": {
+    "format": "󰙯 ",
+    "on-click": "discord",
+    "tooltip": false
+  },
+
+  "group/coding": {
+    "orientation": "vertical",
+    "modules": [
+      "custom/code_label",
+      "custom/webstorm",
+      "custom/goland",
+      "custom/divider"
+    ],
+  },
+
+  "group/socials": {
+    "orientation": "horizontal",
+    "modules": [
+        "custom/empty",
+        "custom/discord",
+        "custom/slack",
+    ],
+  },
+
+  "group/socials2": {
+    "orientation": "horizontal",
+    "modules": [
+        "custom/empty",
+        "custom/reddit",
+        "custom/whatsapp"
+    ]
+  },
+
+  "custom/reddit": {
+    "format": " ",
+    "interval": 99999,
+    "on-click": "firefox https://reddit.com",
+    "tooltip": false
+  },
+
+  "custom/whatsapp": {
+    "format": "",
+    "tooltip": false,
+    "interval": 99999,
+    "on-click": "firefox https://web.whatsapp.com"
+  },
+
+  "custom/webstorm": {
+    "format": "  WebStorm",
+    "on-click": "webstorm"
+  },
+  "custom/goland": {
+    "format": "  GoLand",
+    "on-click": "goland"
+  },
+  "custom/slack": {
+    "format": "",
+    "on-click": "slack",
+    "tooltip": false
+  },
+  "group/fun": {
+    "orientation": "horizontal",
+    "modules": [
+        "custom/empty",
+        "custom/empty",
+        "custom/spotify_progress",
+        "custom/youtube",
+        "custom/empty",
+    ]
+  },
+  "group/fun2": {
+    "orientation": "horizontal",
+    "modules": [
+        "custom/empty",
+        "custom/empty",
+        "custom/novel",
+        "custom/manhwa"
+    ]
+  },
+  "custom/youtube": {
+    "format": " ",
+    "on-click": "firefox youtube.com",
+    "tooltip": false
+  },
+  "custom/divider": { "format": "─────────────", "tooltip": false },
+  "custom/divider2": { "format": "─────────────", "tooltip": false },
+  "custom/next": {
+    "format": "󰓅 NextJS",
+    "on-click": "hyprctl dispatch workspace empty && /home/igris/.config/scripts/smart-chrome.sh http://localhost:3000",
+    "tooltip": false,
+  },
+  "custom/react": {
+    "format": " ReactJS",
+    "on-click": "hyprctl dispatch workspace empty && /home/igris/.config/scripts/smart-chrome.sh http://localhost:5173",
+    "tooltip": false
+  },
+  "group/dev": {
+    "orientation": "vertical",
+    "modules": [
+        "custom/dev_label",
+        "custom/next",
+        "custom/react",
+        "custom/divider"
+    ]
+  },
+  "custom/spotify_progress": {
+    "exec": "~/.config/waybar/scripts/spotify_progress.sh",
+    "interval": 2,
+    "format": "{}",
+    "tooltip": false,
+    "return-type": "json",
+    "on-click": "spotify-launcher",
+    "max-length": 100
+  },
+  "custom/motto": {
+    "format": "The only way to defat a nuke is",
+    "tooltip": false,
+    "interval": 9999
+  },
+  "custom/motto2": {
+    "format": "to become a nuke yourself",
+    "tooltip": false,
+    "interval": 9999
+  },
+  "clock": {
+    "format": "  {:%H:%M}",
+    "tooltip-format": "  {:%A, %d %B %Y}"
+  },
+  "custom/empty": {
+    "format": " ",
+    "tooltip": false,
+    "interval": 99999
+  },
+  "custom/novel": {
+    "format": " ",
+    "tooltip": false,
+    "interval": 99999,
+    "on-click": "firefox https://novelbin.com"
+  },
+  "custom/manhwa": {
+    "format": "⚔️",
+    "tooltip": false,
+    "interval": 9999,
+    "on-click": "firefox https://manhwatop.com"
+  },
+  "custom/social_label": {
+    "format": "──────  Socials──────",
+    "tooltip": false,
+    "interval": 99999
+  },
+  "custom/fun_label": {
+    "format": "─────  Entertainment─────",
+    "tooltip": false,
+    "interval": 99999
+  },
+  "custom/code_label": {
+    "format": "─────  Code Editors─────",
+    "tooltip": false,
+    "interval": 99999
+  },
+  "custom/dev_label": {
+    "format": "──────  Development──────",
+    "tooltip": false,
+    "interval": 99999
+  },
+}

@@ -1,0 +1,317 @@
+@import url("./matugen/colors.css");
+
+/* ===== GLOBAL ===== */
+* {
+    font-family: "Font Awesome 7 Brands", "Font Awesome 7 Free",
+    "Symbols Nerd Font", monospace;
+    font-size: 26px;
+    color: @on_surface;
+    margin: -1px;
+    padding: 0;
+
+    text-shadow:
+            0 0 3px alpha(@primary, 0.40),
+            0 0 8px alpha(@tertiary, 0.20),
+            0 0 12px alpha(@primary, 0.15);
+}
+
+/* ===== WINDOW ===== */
+window#waybar {
+    background-color: alpha(@surface_container, 0.85);
+    border-radius: 10px;
+    border: 1.5px solid alpha(@primary, 0.40);
+    padding: 10px;
+
+    box-shadow:
+            0 0 8px alpha(@primary, 0.30),
+            0 0 16px alpha(@primary_container, 0.20),
+            inset 0 0 20px alpha(@primary_container, 0.10),
+            inset 0 0 30px alpha(@primary, 0.05);
+}
+
+/* ===== TITLE ===== */
+#custom-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: @on_surface;
+    letter-spacing: 1px;
+
+    text-shadow:
+            0 0 4px alpha(@primary, 0.50),
+            0 0 10px alpha(@primary_container, 0.35);
+}
+
+/* ===== PROFILE ===== */
+#custom-profile {
+    min-width: 100px;
+    min-height: 250px;
+
+    background-image: url("/home/igris/.config/rices/rice2/profile/kagenou (1).jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+
+    border-radius: 50%;
+    margin: 20px 5px 10px 5px;
+
+    border: 2.5px solid alpha(@primary, 0.50);
+    box-shadow:
+            0 0 8px alpha(@primary, 0.40),
+            0 0 16px alpha(@primary_container, 0.20),
+            0 0 24px alpha(@tertiary, 0.12);
+
+    transition: all 0.3s ease;
+}
+
+#custom-profile:hover {
+    animation: auraGlow 2s ease-in-out infinite;
+}
+
+@keyframes auraGlow {
+    0% {
+        box-shadow:
+                0 0 6px alpha(@primary, 0.25),
+                0 0 15px alpha(@primary_container, 0.15),
+                0 0 30px alpha(@primary_container, 0.10);
+    }
+    50% {
+        box-shadow:
+                0 0 10px alpha(@primary, 0.55),
+                0 0 25px alpha(@primary_container, 0.35),
+                0 0 40px alpha(@tertiary, 0.25);
+    }
+    100% {
+        box-shadow:
+                0 0 6px alpha(@primary, 0.25),
+                0 0 15px alpha(@primary_container, 0.15),
+                0 0 30px alpha(@primary_container, 0.10);
+    }
+}
+
+/* ===== GROUP CONTAINERS ===== */
+#group-coding,
+#group-socials,
+#group-socials2,
+#group-fun,
+#group-dev {
+    margin-top: 20px;
+    padding: 6px;
+    border-radius: 8px;
+
+    background: linear-gradient(
+            135deg,
+            alpha(@primary_container, 0.12),
+            alpha(@tertiary, 0.08)
+    );
+
+    border: 1px solid alpha(@primary, 0.22);
+
+    box-shadow:
+            inset 0 0 6px alpha(@primary, 0.12),
+            inset 0 0 12px alpha(@primary_container, 0.08);
+
+    transition: all 0.2s ease;
+}
+
+#group-socials,
+#group-socials2 {
+    padding: 20px;
+}
+
+/* ===== GROUP LABELS ===== */
+#custom-code_label,
+#custom-social_label,
+#custom-fun_label,
+#custom-dev_label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    margin-top: 25px;
+    color: @on_surface;
+    letter-spacing: 0.8px;
+    font-size: 18px;
+
+    text-shadow:
+            0 0 6px alpha(@primary, 0.45),
+            0 0 12px alpha(@primary_container, 0.30);
+
+    animation: glowPulse 8s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0% {
+        color: alpha(@on_surface, 0.80);
+        text-shadow:
+                0 0 4px alpha(@primary, 0.35),
+                0 0 8px alpha(@primary_container, 0.25);
+    }
+    50% {
+        color: @on_surface;
+        text-shadow:
+                0 0 10px alpha(@primary, 0.65),
+                0 0 18px alpha(@tertiary, 0.50),
+                0 0 28px alpha(@error, 0.40);
+    }
+    100% {
+        color: alpha(@on_surface, 0.80);
+        text-shadow:
+                0 0 4px alpha(@primary, 0.35),
+                0 0 8px alpha(@primary_container, 0.25);
+    }
+}
+
+/* ===== BUTTONS ===== */
+#custom-webstorm,
+#custom-goland,
+#custom-discord,
+#custom-slack,
+#custom-youtube,
+#custom-next,
+#custom-react,
+#custom-spotify_progress,
+#custom-reddit,
+#custom-whatsapp,
+#custom-novel,
+#custom-manhwa {
+    margin: 3px 6px;
+    padding: 6px 12px;
+    border-radius: 14px;
+
+    background: alpha(@primary_container, 0.10);
+    border: 1px solid alpha(@primary, 0.25);
+
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    min-width: 80px;
+}
+
+/* ===== HOVERS (semantic, not brand colors) ===== */
+#custom-webstorm:hover,
+#custom-goland:hover {
+    background: alpha(@primary, 0.18);
+    border-color: alpha(@primary, 0.35);
+}
+
+#custom-discord:hover,
+#custom-slack:hover,
+#custom-reddit:hover,
+#custom-whatsapp:hover {
+    background: alpha(@secondary, 0.20);
+    border-color: alpha(@secondary, 0.45);
+}
+
+#custom-next:hover,
+#custom-react:hover {
+    background: alpha(@tertiary, 0.22);
+    border-color: alpha(@tertiary, 0.40);
+}
+
+#custom-youtube:hover,
+#custom-novel:hover,
+#custom-manhwa:hover {
+    background: alpha(@error, 0.15);
+    border-color: alpha(@error, 0.40);
+}
+
+#custom-spotify_progress:hover {
+    background: alpha(@secondary_container, 0.15);
+    border-color: alpha(@secondary, 0.35);
+}
+
+/* ===== TEXT TONES ===== */
+#custom-webstorm,
+#custom-goland,
+#custom-react,
+#custom-next,
+#custom-discord,
+#custom-slack,
+#custom-youtube,
+#custom-spotify_progress,
+#custom-reddit,
+#custom-whatsapp,
+#custom-novel,
+#custom-manhwa {
+    color: @on_surface;
+}
+
+#custom-spotify_progress {
+    font-family: "Roboto Mono", monospace;
+}
+
+/* ===== MOTTO ===== */
+#custom-motto,
+#custom-motto2 {
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    padding: 0 10px;
+    font-style: italic;
+    color: alpha(@on_surface, 0.85);
+
+    transition: all 0.3s ease;
+}
+
+#custom-motto:hover,
+#custom-motto2:hover {
+    color: @on_surface;
+    text-shadow:
+            0 0 8px alpha(@primary, 0.50),
+            0 0 16px alpha(@tertiary, 0.40),
+            0 0 24px alpha(@error, 0.30);
+}
+
+/* ===== DIVIDERS ===== */
+#custom-divider,
+#custom-divider2 {
+    margin: 14px;
+    border-radius: 1px;
+
+    background: linear-gradient(
+    90deg,
+    alpha(@surface_variant, 0.30),
+    @primary,
+    @tertiary,
+    @error,
+    @primary
+    );
+
+    background-size: 300% 100%;
+    animation: flowDivider 20s ease-in-out alternate-reverse infinite;
+
+    box-shadow:
+            0 0 8px alpha(@primary, 0.40),
+            0 0 16px alpha(@primary_container, 0.30);
+
+    font-size: 1px;
+}
+
+#custom-divider2 {
+    animation-duration: 10s;
+}
+
+@keyframes flowDivider {
+    0%   { background-position: 300% 0; opacity: 0.75; }
+    50%  { background-position: 0% 0;   opacity: 1;    }
+    100% { background-position: -300% 0; opacity: 0.75; }
+}
+
+/* ===== WEATHER + CLOCK ===== */
+#custom-weather,
+#clock {
+    font-size: 1.3rem;
+    margin: 6px 8px;
+    color: @on_surface;
+
+    text-shadow:
+            0 0 4px alpha(@primary, 0.40),
+            0 0 10px alpha(@tertiary, 0.30);
+
+    transition: all 0.2s ease;
+}
+
+#custom-weather:hover,
+#clock:hover {
+    text-shadow:
+            0 0 6px alpha(@primary, 0.60),
+            0 0 14px alpha(@tertiary, 0.45),
+            0 0 20px alpha(@error, 0.30);
+}
