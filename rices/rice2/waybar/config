@@ -70,7 +70,6 @@
   "custom/message": {
     "format": "Welcome Dhruv",
     "tooltip": false,
-    "on-click": "swaync-client -t"
   },
   "custom/bluetooth": {
     "format": "{}",

@@ -15,12 +15,12 @@ PanelWindow {
     implicitHeight: 600
 
     anchors {
-        top: true
+        bottom: true
         right: true
     }
 
     margins {
-        top: 40
+        bottom: 40
     }
 
     color: ColorsModule.Colors.background

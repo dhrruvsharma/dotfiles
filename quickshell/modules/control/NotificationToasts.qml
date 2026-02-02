@@ -13,7 +13,7 @@ PanelWindow {
     anchors.top: true
     anchors.right: true
 
-    implicitWidth: 340
+    implicitWidth: Services.Notification.popups.length > 0 ? 340 : 0
     implicitHeight: 600
 
     Column {
