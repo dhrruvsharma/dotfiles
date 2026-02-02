@@ -1,33 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Quickshell.Io
 import Quickshell
 import qs.services as Services
-import "../colors" as ColorsModule
+import "../../colors" as ColorsModule
 
-PanelWindow {
-    id: wifiPanel
-    visible: true
-    focusable: true
-
-    implicitWidth: 380
-    implicitHeight: 600
-
-    anchors {
-        top: true
-        right: true
-    }
-
-    margins {
-        top: 40
-        right: 10
-    }
-
-    color: ColorsModule.Colors.background
-
+Item {
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 16
         spacing: 14
 
         RowLayout {
@@ -239,7 +220,13 @@ PanelWindow {
                     spacing: 6
 
                     Repeater {
-                        model: Services.Network.connections.filter(c => c.type === "wifi")
+                        model: Services.Network.connections
+                            .filter(c => c.type === "wifi")
+                            .sort((a, b) => {
+                            if (a.active && !b.active) return -1
+                            if (!a.active && b.active) return 1
+                            return b.strength - a.strength
+                        })
 
                         delegate: Rectangle {
                             Layout.fillWidth: true
@@ -256,13 +243,24 @@ PanelWindow {
                                 spacing: 12
 
                                 Text {
-                                    text: modelData.active ? "󰄬" : "󰤨"
                                     font.family: "Material Design Icons"
                                     font.pixelSize: 22
+
+                                    text: {
+                                        if (modelData.active) return "󰄬";
+
+                                        const s = modelData.strength;
+                                        if (s >= 75) return "󰤨";
+                                        if (s >= 50) return "󰤥";
+                                        if (s >= 25) return "󰤢";
+                                        return "󰤟";
+                                    }
+
                                     color: modelData.active
                                         ? ColorsModule.Colors.primary
                                         : ColorsModule.Colors.on_surface_variant
                                 }
+
 
                                 Text {
                                     text: modelData.name
@@ -293,7 +291,6 @@ PanelWindow {
             }
         }
     }
-
 
     Rectangle {
         id: passwordDialog
