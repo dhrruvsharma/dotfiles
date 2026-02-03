@@ -12,14 +12,18 @@ ColumnLayout {
     SliderRow {
         label: "Volume"
         icon: "󰕾"
-        value: Services.System.volume
-        onMoved: Services.System.setVolume(value)
+        showValue: true
+        valueSuffix: "%"
+        value: Services.Volume.volume*100
+        onMoved: Services.Volume.setVolume(value / 100)
     }
 
     SliderRow {
-        label: "Brightness"
         icon: "󰃞"
+        label: "Brightness"
         value: Services.System.brightness
         onMoved: Services.System.setBrightness(value)
+        showValue: true
+        valueSuffix: "%"
     }
 }

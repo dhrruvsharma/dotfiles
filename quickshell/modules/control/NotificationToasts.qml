@@ -31,14 +31,16 @@ PanelWindow {
 
                 radius: 14
                 width: 280
-                height: content.implicitHeight + 16
+                height: content.implicitHeight + 18
 
                 color: ColorsModule.Colors.surface_container_high
                 border.color: ColorsModule.Colors.outline_variant
                 border.width: 1
 
                 opacity: 1
+                scale: 1
 
+                // shadow
                 layer.enabled: true
                 layer.effect: DropShadow {
                     horizontalOffset: 0
@@ -52,30 +54,83 @@ PanelWindow {
                     NumberAnimation { duration: 120 }
                 }
 
+                Behavior on scale {
+                    NumberAnimation { duration: 120 }
+                }
+
                 ColumnLayout {
                     id: content
                     anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 4
+                    anchors.margins: 12
+                    spacing: 6
 
-                    Text {
-                        text: modelData.summary
-                        font.bold: true
-                        color: ColorsModule.Colors.on_surface
-                        wrapMode: Text.Wrap
-                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
 
-                    Text {
-                        visible: modelData.body.length > 0
-                        text: modelData.body
-                        color: ColorsModule.Colors.on_surface_variant
-                        wrapMode: Text.Wrap
+                        Rectangle {
+                            width: 28
+                            height: 28
+                            radius: 7
+                            color: "transparent"
+                            clip: true
+
+                            Image {
+                                anchors.fill: parent
+                                fillMode: Image.PreserveAspectFit
+                                smooth: true
+                                property var image: modelData.appIcon
+
+                                source: {
+                                    if (typeof image !== "undefined" && image && image.startsWith("/"))
+                                        return "file://" + image;
+
+                                    if (typeof image !== "undefined" && image && image.includes("://"))
+                                        return image;
+
+                                    if (typeof appIcon !== "undefined" && appIcon && appIcon.includes("/"))
+                                        return "file://" + appIcon;
+
+                                    if (typeof appIcon !== "undefined" && appIcon)
+                                        return "image://icon/" + appIcon;
+
+                                    return "";
+                                }
+                            }
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 3
+
+                            Text {
+                                text: modelData.summary
+                                font.bold: true
+                                font.pixelSize: 13
+                                color: ColorsModule.Colors.on_surface
+                                wrapMode: Text.Wrap
+                                Layout.fillWidth: true
+                            }
+
+                            Text {
+                                visible: modelData.body.length > 0
+                                text: modelData.body
+                                font.pixelSize: 12
+                                color: ColorsModule.Colors.on_surface_variant
+                                wrapMode: Text.Wrap
+                                Layout.fillWidth: true
+                            }
+                        }
                     }
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
+
+                    onPressed: parent.scale = 0.97
+                    onReleased: parent.scale = 1.0
+
                     onClicked: modelData.popup = false
                 }
             }

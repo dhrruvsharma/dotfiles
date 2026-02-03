@@ -1,11 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Quickshell
 import qs.services as Services
 import "../../colors" as ColorsModule
 
 Item {
     id: root
+
     Layout.fillWidth: true
     Layout.preferredHeight: notifSection.height
     Layout.margins: 15
@@ -49,7 +51,6 @@ Item {
                 text: "Clear All"
                 font.pixelSize: 11
                 visible: notifModel.length > 0
-
                 onClicked: clearAll()
 
                 contentItem: Text {
@@ -64,15 +65,17 @@ Item {
                     implicitWidth: 70
                     implicitHeight: 28
                     radius: 14
+
                     color: parent.pressed ?
                         Qt.rgba(ColorsModule.Colors.primary.r,
                             ColorsModule.Colors.primary.g,
-                            ColorsModule.Colors.primary.b, 0.15) :
-                        parent.hovered ?
+                            ColorsModule.Colors.primary.b, 0.15)
+                        : parent.hovered ?
                             Qt.rgba(ColorsModule.Colors.primary.r,
                                 ColorsModule.Colors.primary.g,
-                                ColorsModule.Colors.primary.b, 0.08) :
-                            ColorsModule.Colors.surface_container_high
+                                ColorsModule.Colors.primary.b, 0.08)
+                            : ColorsModule.Colors.surface_container_high
+
                     border.width: 1
                     border.color: ColorsModule.Colors.outline_variant
                 }
@@ -81,8 +84,9 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.preferredHeight: notifModel.length > 0 ?
-                Math.min(list.contentHeight + 16, 400) : 120
+            Layout.preferredHeight: notifModel.length > 0
+                ? Math.min(list.contentHeight + 16, 400)
+                : 120
 
             radius: 16
             color: ColorsModule.Colors.surface_container
@@ -130,16 +134,15 @@ Item {
 
                 delegate: Rectangle {
                     width: list.width - 16
-                    height: contentColumn.implicitHeight + 24
+                    height: contentColumn.implicitHeight + 20
                     radius: 12
 
                     color: ColorsModule.Colors.surface_container_high
                     border.width: 1
                     border.color: ColorsModule.Colors.outline_variant
 
-                    required property var modelData   // Notif object
+                    required property var modelData
 
-                    /* hover */
                     MouseArea {
                         id: mouseArea
                         anchors.fill: parent
@@ -151,71 +154,80 @@ Item {
                         radius: parent.radius
                         color: ColorsModule.Colors.primary
                         opacity: mouseArea.containsMouse ? 0.05 : 0
-                        Behavior on opacity { NumberAnimation { duration: 150 } }
+                        Behavior on opacity { NumberAnimation { duration: 120 } }
                     }
 
-                    /* accent */
-                    Rectangle {
-                        width: 3
-                        height: parent.height - 8
-                        anchors.left: parent.left
-                        anchors.leftMargin: 4
-                        anchors.verticalCenter: parent.verticalCenter
-                        radius: 1.5
-                        color: ColorsModule.Colors.primary
-                        opacity: 0.6
-                    }
-
-                    ColumnLayout {
+                    RowLayout {
                         id: contentColumn
                         anchors.fill: parent
-                        anchors.leftMargin: 16
-                        anchors.rightMargin: 12
-                        anchors.topMargin: 12
-                        anchors.bottomMargin: 12
-                        spacing: 6
+                        anchors.margins: 12
+                        spacing: 12
 
-                        RowLayout {
+                        Rectangle {
+                            width: 32
+                            height: 32
+                            radius: 8
+                            color: "transparent"
+                            clip: true
+                            Layout.alignment: Qt.AlignTop
+
+                            Image {
+                                anchors.fill: parent
+                                fillMode: Image.PreserveAspectFit
+                                smooth: true
+
+                                source: modelData.appIcon !== ""
+                                    ? Quickshell.icon(modelData.appIcon)
+                                    : "image://theme/dialog-information"
+                            }
+                        }
+
+                        ColumnLayout {
                             Layout.fillWidth: true
+                            spacing: 5
 
-                            Text {
-                                text: modelData.appName || "App"
-                                font.pixelSize: 11
-                                font.weight: Font.Medium
-                                color: ColorsModule.Colors.primary
+                            RowLayout {
                                 Layout.fillWidth: true
-                                elide: Text.ElideRight
+
+                                Text {
+                                    text: modelData.appName || "App"
+                                    font.pixelSize: 11
+                                    font.weight: Font.Medium
+                                    color: ColorsModule.Colors.primary
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                }
+
+                                Text {
+                                    text: modelData.timeStr
+                                    font.pixelSize: 10
+                                    color: ColorsModule.Colors.on_surface_variant
+                                    opacity: 0.7
+                                }
                             }
 
                             Text {
-                                text: modelData.timeStr
-                                font.pixelSize: 10
-                                color: ColorsModule.Colors.on_surface_variant
-                                opacity: 0.7
+                                text: modelData.summary
+                                font.pixelSize: 13
+                                font.weight: Font.DemiBold
+                                wrapMode: Text.Wrap
+                                Layout.fillWidth: true
+                                color: ColorsModule.Colors.on_surface
+                                maximumLineCount: 2
+                                elide: Text.ElideRight
+                                visible: text.length > 0
                             }
-                        }
 
-                        Text {
-                            text: modelData.summary
-                            font.pixelSize: 13
-                            font.weight: Font.DemiBold
-                            wrapMode: Text.Wrap
-                            Layout.fillWidth: true
-                            color: ColorsModule.Colors.on_surface
-                            maximumLineCount: 2
-                            elide: Text.ElideRight
-                            visible: text.length > 0
-                        }
-
-                        Text {
-                            text: modelData.body
-                            font.pixelSize: 12
-                            wrapMode: Text.Wrap
-                            Layout.fillWidth: true
-                            color: ColorsModule.Colors.on_surface_variant
-                            maximumLineCount: 4
-                            elide: Text.ElideRight
-                            visible: text.length > 0
+                            Text {
+                                text: modelData.body
+                                font.pixelSize: 12
+                                wrapMode: Text.Wrap
+                                Layout.fillWidth: true
+                                color: ColorsModule.Colors.on_surface_variant
+                                maximumLineCount: 4
+                                elide: Text.ElideRight
+                                visible: text.length > 0
+                            }
                         }
                     }
                 }

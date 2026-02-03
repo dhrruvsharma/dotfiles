@@ -74,7 +74,7 @@ ColumnLayout {
             active: nightLightEnabled
             onClicked: {
                 quickSettings.nightLightEnabled = !nightLightEnabled
-                run("gammastep -O " + (nightLightEnabled ? "4000" : "6500"))
+                run(["bash", "-c", "gammastep -O " + (nightLightEnabled ? "4000" : "6500")])
             }
         }
 

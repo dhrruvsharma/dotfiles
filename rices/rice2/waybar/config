@@ -69,7 +69,7 @@
   },
   "custom/message": {
     "format": "Welcome Dhruv",
-    "tooltip": false,
+    "tooltip": false
   },
   "custom/bluetooth": {
     "format": "{}",
@@ -79,7 +79,7 @@
     "interval": 5
   },
   "custom/launcher": {
-    "format": "Start",
+    "format": "󰐥",
     "tooltip": false,
     "on-click": "~/.config/waybar/scripts/toggle-sidebar.sh",
     "class": "launcher"

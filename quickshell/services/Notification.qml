@@ -62,7 +62,7 @@ Singleton {
         required property Notification notification
         readonly property string summary: notification.summary
         readonly property string body: notification.body
-        readonly property string appIcon: notification.appIcon
+        readonly property string appIcon: (notification.appIcon !== undefined) ? String(notification.appIcon) : ""
         readonly property string appName: notification.appName
         readonly property string image: notification.image
         readonly property int urgency: notification.urgency

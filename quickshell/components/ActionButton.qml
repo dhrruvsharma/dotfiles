@@ -1,57 +1,59 @@
 import QtQuick
 import QtQuick.Layouts
 import "../colors" as ColorsModule
+
 Rectangle {
-        required property string icon
-        required property string label
-        signal clicked
+    id: root
 
-        Layout.fillWidth: true
-        Layout.preferredHeight: 56
-        radius: 14
-        color: ColorsModule.Colors.error_container
-        border.width: 1
-        border.color: Qt.rgba(ColorsModule.Colors.error.r, ColorsModule.Colors.error.g, ColorsModule.Colors.error.b, 0.3)
+    required property string icon
+    required property string label
+    required property color buttonColor
+    signal clicked
 
-        RowLayout {
-            anchors.centerIn: parent
-            spacing: 12
+    Layout.fillWidth: true
+    Layout.preferredHeight: 56
 
-            Text {
-                text: icon
-                font.family: "Material Design Icons"
-                font.pixelSize: 22
-                color: ColorsModule.Colors.on_error_container
-            }
+    radius: 16
+    border.width: 1
+    border.color: ColorsModule.Colors.outline_variant
 
-            Text {
-                text: label
-                font.pixelSize: 14
-                font.weight: Font.DemiBold
-                color: ColorsModule.Colors.on_error_container
-            }
+    property bool hovered: false
+    property bool pressed: false
+    color: buttonColor
+
+    scale: pressed ? 0.96 : (hovered ? 0.98 : 1)
+    opacity: hovered ? 0.95 : 1
+
+    RowLayout {
+        anchors.centerIn: parent
+        spacing: 12
+
+        Text {
+            text: icon
+            font.family: "Material Design Icons"
+            font.pixelSize: 22
+            color: ColorsModule.Colors.on_surface
         }
 
-        MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onClicked: parent.clicked()
-
-            onEntered: {
-                parent.scale = 0.96
-                parent.opacity = 0.9
-            }
-            onExited: {
-                parent.scale = 1.0
-                parent.opacity = 1.0
-            }
-        }
-
-        Behavior on scale {
-            NumberAnimation { duration: 150; easing.type: Easing.OutCubic }
-        }
-
-        Behavior on opacity {
-            NumberAnimation { duration: 150 }
+        Text {
+            text: label
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
+            color: ColorsModule.Colors.on_surface
         }
     }
+
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+
+        onClicked: root.clicked()
+        onEntered: root.hovered = true
+        onExited: root.hovered = false
+        onPressed: root.pressed = true
+        onReleased: root.pressed = false
+    }
+
+    Behavior on scale { NumberAnimation { duration: 90; easing.type: Easing.OutCubic } }
+    Behavior on opacity { NumberAnimation { duration: 90 } }
+}

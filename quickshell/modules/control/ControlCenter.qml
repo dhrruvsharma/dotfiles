@@ -13,11 +13,11 @@ PanelWindow {
     visible: false
 
     anchors.left: true
-    anchors.right: true
     anchors.top: true
     anchors.bottom: true
+    exclusionMode: ExclusionMode.Ignore
 
-    margins.top: 10
+    implicitWidth: 400
     margins.left: 0
 
     color: "transparent"
