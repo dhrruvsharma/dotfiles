@@ -9,7 +9,6 @@ palette = "material"
 [templates.waybar]
 input_path = "/home/igris/.config/matugen/templates/waybar.css"
 output_path = "/home/igris/.config/rices/rice2/waybar/matugen/colors.css"
-post_hook = "pkill waybar || true; waybar &"
 
 [templates.quickshell]
 input_path  = "/home/igris/.config/matugen/templates/quickshell.qml"
