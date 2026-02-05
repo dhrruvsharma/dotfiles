@@ -2,7 +2,7 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
-
+import qs.services as Services
 
 Singleton {
     PwObjectTracker {
@@ -20,20 +20,39 @@ Singleton {
     property var sources: Pipewire.nodes.values.filter(node => !node.isSink && !node.isStream && node.audio)
     property PwNode defaultSource: Pipewire.defaultAudioSource
 
-    property real volume: defaultSink?.audio?.volume ?? 0
+    property real volume: (defaultSink?.audio?.volume > 1 ? 1 : defaultSink?.audio?.volume) ?? 0
     property bool muted: defaultSink?.audio?.muted ?? false
+
+    Connections {
+        id: audioConn
+        target: defaultSink && defaultSink.audio ? defaultSink.audio : null
+
+        function onVolumeChanged() {
+            let vol = Math.min(defaultSink.audio.volume * 100, 100)  // Clamp to 100
+            Services.Osd.show("volume", vol)
+        }
+
+        function onMutedChanged() {
+            let vol = defaultSink.audio.muted ? 0 : Math.min(defaultSink.audio.volume * 100, 100)
+            Services.Osd.show("volume", vol)
+        }
+    }
 
     function setVolume(to: real): void {
         if (defaultSink?.ready && defaultSink?.audio) {
             defaultSink.audio.muted = false;
-            defaultSink.audio.volume = Math.max(0, Math.min(1, to));
+            let val = Math.max(0, Math.min(1, to));
+            defaultSink.audio.volume = val
+            Services.Osd.show("volume", val * 100)
         }
     }
 
     function setSourceVolume(to: real): void {
         if (defaultSource?.ready && defaultSource?.audio) {
             defaultSource.audio.muted = false;
-            defaultSource.audio.volume = Math.max(0, Math.min(1, to));
+            let val = Math.max(0, Math.min(1, to));
+            defaultSource.audio.volume = val
+            Services.Osd.show("volume", val * 100)
         }
     }
 

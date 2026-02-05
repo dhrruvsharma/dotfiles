@@ -6,10 +6,6 @@ mode = "dark"
 scheme = "material"
 palette = "material"
 
-[templates.waybar]
-input_path = "/home/igris/.config/matugen/templates/waybar.css"
-output_path = "/home/igris/.config/rices/rice2/waybar/matugen/colors.css"
-
 [templates.quickshell]
 input_path  = "/home/igris/.config/matugen/templates/quickshell.qml"
 output_path = "/home/igris/.config/quickshell/colors/Colors.qml"
@@ -22,11 +18,6 @@ post_hook = "gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
 [templates.gtk4]
 input_path = "/home/igris/.config/matugen/templates/GTK.css"
 output_path = "/home/igris/.config/gtk-4.0/colors.css"
-
-[templates.sway]
-input_path = '/home/igris/.config/matugen/templates/sway.css'
-output_path = '/home/igris/.config/rices/rice2/swaync/matugen/colors.css'
-post_hook = 'pkill swaync || true; swaync &'
 
 [templates.rofi]
 input_path = "/home/igris/.config/matugen/templates/rofi-color.rasi"
@@ -41,9 +32,4 @@ post_hook = "kitty @ set-colors --all ~/.config/rices/rice2/kitty/colors.conf"
 input_path = "/home/igris/.config/matugen/templates/hyprland.conf"
 output_path = "/home/igris/.config/rices/rice2/hypr/colors.conf"
 post_hook = "hyprctl reload"
-
-[templates.swayosd]
-input_path = "/home/igris/.config/matugen/templates/swayosd.css"
-output_path = "/home/igris/.config/swayosd/colors.css"
-post_hook   = "pkill swayosd || true; swayosd-server &"
 

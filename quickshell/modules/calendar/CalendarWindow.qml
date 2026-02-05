@@ -12,7 +12,7 @@ PanelWindow {
     anchors.top: true
     anchors.left: true
     margins.top: 0
-    margins.left: 200
+    margins.left: 240
 
     implicitWidth: 340
     implicitHeight: 380

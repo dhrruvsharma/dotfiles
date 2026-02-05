@@ -5,45 +5,109 @@ import Quickshell
 import qs.services
 import Quickshell.Io
 import "../../../colors" as ColorsModule
+import qs.components
 
 Item {
     id: root
 
     implicitHeight: 32
-    implicitWidth: pill.implicitWidth
+
+    property int maxWidth: 200
 
     property var media: Media
     visible: media.activePlayer !== null
 
+    implicitWidth: Math.min(pill.implicitWidth, maxWidth)
+
     Rectangle {
         id: pill
+        anchors.fill: parent
+
         radius: height / 2
         height: 32
         color: ColorsModule.Colors.background
 
+        clip: true
+
         implicitWidth: row.implicitWidth + 20
+
+        CavaBars {
+            anchors.fill: parent
+            anchors.margins: 5
+            opacity: 0.5
+            enableShadow: false
+        }
 
         RowLayout {
             id: row
-            anchors.centerIn: parent
+
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+                leftMargin: 10
+                rightMargin: 10
+            }
+
             spacing: 8
+            z: 1
 
-            MouseArea {
-                id: volume
-                onClicked: toggleProc.running = true
-                anchors.fill: parent
+            Item {
+                Layout.fillWidth: true
+                Layout.preferredWidth: root.maxWidth - 20
+                Layout.preferredHeight: mediaText.height
+                clip: true
+
+                Row {
+                    id: marqueeRow
+                    spacing: 50
+
+                    property bool isClipped: mediaText.implicitWidth > parent.width
+
+                    Text {
+                        id: mediaText
+                        text: media.artist
+                            ? media.title + " — " + media.artist
+                            : media.title
+
+                        color: ColorsModule.Colors.on_surface
+                        font.pixelSize: 17
+                    }
+
+                    Text {
+                        visible: marqueeRow.isClipped
+                        text: mediaText.text
+                        color: ColorsModule.Colors.on_surface
+                        font.pixelSize: 17
+                    }
+
+                    SequentialAnimation {
+                        running: marqueeRow.isClipped
+                        loops: Animation.Infinite
+
+                        PauseAnimation { duration: 2000 }
+
+                        NumberAnimation {
+                            target: marqueeRow
+                            property: "x"
+                            from: 0
+                            to: -(mediaText.implicitWidth + marqueeRow.spacing)
+                            duration: (mediaText.implicitWidth + marqueeRow.spacing) * 20
+                            easing.type: Easing.Linear
+                        }
+
+                        PropertyAction {
+                            target: marqueeRow
+                            property: "x"
+                            value: 0
+                        }
+                    }
+                }
             }
-
-            Text {
-                text: media.artist
-                    ? media.title + " — " + media.artist
-                    : media.title
-
-                color: ColorsModule.Colors.on_surface
-                font.pixelSize: 17
-                elide: Text.ElideRight
-                maximumLineCount: 1
-            }
+        }
+        MouseArea {
+            onClicked: toggleProc.running = true
+            anchors.fill: parent
+            z: 2
         }
     }
 

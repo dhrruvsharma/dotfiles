@@ -10,8 +10,9 @@ Item {
     property int barCount: Services.Cava.barsCount
     property real spacing: 3
     property real corner: 2
-    Component.onCompleted: Services.Cava.running = true
+    property bool enableShadow: true  // Add this property
 
+    Component.onCompleted: Services.Cava.running = true
 
     implicitHeight: 42
     implicitWidth: 320
@@ -35,7 +36,7 @@ Item {
                     GradientStop { position: 1;   color: ColorsModule.Colors.primary_fixed }
                 }
 
-                layer.enabled: true
+                layer.enabled: root.enableShadow  // Use the property here
                 layer.effect: DropShadow {
                     radius: 8
                     samples: 16
@@ -53,8 +54,6 @@ Item {
                     }
                 }
             }
-
-
         }
     }
 }

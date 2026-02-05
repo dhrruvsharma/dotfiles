@@ -2,6 +2,7 @@ pragma Singleton
 import QtQuick
 import Quickshell.Io
 import Quickshell
+import qs.services
 
 Singleton {
     id: stats
@@ -12,8 +13,8 @@ Singleton {
     property real temp: 0
     property string uptime: "0h 0m"
 
-    property int volume: 0
     property int brightness: 0
+    property int lastBrightness: -1
 
     Timer {
         interval: 2000
@@ -25,8 +26,14 @@ Singleton {
             diskProc.running = true
             tempProc.running = true
             uptimeProc.running = true
+        }
+    }
 
-            volumeProc.running = true
+    Timer {
+        interval: 500
+        running: true
+        repeat: true
+        onTriggered: {
             brightnessProc.running = true
         }
     }
@@ -77,26 +84,6 @@ Singleton {
     }
 
     Process {
-        id: volumeProc
-        command: [
-            "bash","-c",
-            "pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | tr -d '%'"
-        ]
-
-        stdout: StdioCollector {
-            onStreamFinished: stats.volume = parseInt(text) || 0
-        }
-    }
-
-    function setVolume(v) {
-        setVolumeProc.command = ["pactl","set-sink-volume","@DEFAULT_SINK@", v + "%"]
-        setVolumeProc.running = true
-        stats.volume = v
-    }
-
-    Process { id: setVolumeProc }
-
-    Process {
         id: brightnessProc
         command: [
             "bash","-c",
@@ -104,14 +91,25 @@ Singleton {
         ]
 
         stdout: StdioCollector {
-            onStreamFinished: stats.brightness = parseInt(text) || 0
+            onStreamFinished: {
+                let v = parseInt(text) || 0
+                stats.brightness = v
+            }
         }
+    }
+
+    onBrightnessChanged: {
+        if (lastBrightness !== -1 && brightness !== lastBrightness) {
+            Osd.show("brightness", brightness)
+        }
+        lastBrightness = brightness
     }
 
     function setBrightness(v) {
         setBrightnessProc.command = ["brightnessctl","set", v + "%"]
         setBrightnessProc.running = true
         stats.brightness = v
+        Osd.show("brightness", v)  // Show OSD when user changes brightness
     }
 
     Process { id: setBrightnessProc }

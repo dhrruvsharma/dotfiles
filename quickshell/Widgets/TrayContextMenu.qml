@@ -87,7 +87,7 @@ PanelWindow {
                 width: parent.width - 16
                 height: 36
                 radius: 8
-                color: root.colors.accent
+                color: root.colors.secondary
                 opacity: active ? 0.15 : 0
 
                 Behavior on y {

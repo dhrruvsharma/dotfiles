@@ -39,22 +39,26 @@ RowLayout {
             }
         }
 
+        /* ===== Animations restored with hardcoded values ===== */
+
         Behavior on Layout.preferredWidth {
             NumberAnimation {
-                duration: Animations.medium
-                easing.type: Animations.standardEasing
+                duration: 220
+                easing.type: Easing.InOutQuad
             }
         }
 
         Behavior on Layout.rightMargin {
             NumberAnimation {
-                duration: Animations.medium
-                easing.type: Animations.standardEasing
+                duration: 220
+                easing.type: Easing.InOutQuad
             }
         }
 
         Behavior on opacity {
-            NumberAnimation { duration: Animations.fast }
+            NumberAnimation {
+                duration: 120
+            }
         }
     }
 
@@ -66,6 +70,8 @@ RowLayout {
         radius: height / 2
 
         color: colors.background
+        border.width: 1
+        border.color: colors.outline_variant
 
         Icon {
             anchors.centerIn: parent
@@ -73,18 +79,19 @@ RowLayout {
             font.pixelSize: 14
 
             color: colors.on_surface
-
             rotation: trayOpen ? 180 : 0
 
             Behavior on rotation {
                 NumberAnimation {
-                    duration: Animations.medium
-                    easing.type: Animations.enterEasing
+                    duration: 220
+                    easing.type: Easing.OutCubic
                 }
             }
 
             Behavior on color {
-                ColorAnimation { duration: Animations.fast }
+                ColorAnimation {
+                    duration: 120
+                }
             }
         }
 
@@ -100,11 +107,11 @@ RowLayout {
         }
 
         Behavior on color {
-            ColorAnimation { duration: Animations.fast }
+            ColorAnimation { duration: 120 }
         }
 
         Behavior on border.color {
-            ColorAnimation { duration: Animations.fast }
+            ColorAnimation { duration: 120 }
         }
     }
 }

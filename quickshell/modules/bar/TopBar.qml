@@ -21,28 +21,31 @@ PanelWindow {
     exclusiveZone: implicitHeight
     color: "transparent"
 
-    RowLayout {
+    Item {
         anchors.fill: parent
-        spacing: 8
 
         RowLayout {
-            Layout.alignment: Qt.AlignLeft
+            anchors {
+                left: parent.left
+                verticalCenter: parent.verticalCenter
+            }
             spacing: 8
             Workspaces {}
             Cpu {}
             Battery {}
-            Clock { }
+            Clock {}
+            Bluetooth {}
         }
 
         MediaPill {
-            Layout.alignment: Qt.AlignHCenter
             anchors.centerIn: parent
         }
 
-        Item { Layout.fillWidth: true }
-
         RowLayout {
-            Layout.alignment: Qt.AlignRight
+            anchors {
+                right: parent.right
+                verticalCenter: parent.verticalCenter
+            }
             spacing: 10
             Network {}
             Volume {}

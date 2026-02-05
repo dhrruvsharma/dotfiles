@@ -14,7 +14,7 @@ Rectangle {
     Text {
         id: label
         anchors.centerIn: parent
-        text: " " + Math.round(Services.System.volume) + "%"
+        text: " " + Math.round(Services.Volume.volume*100) + "%"
         color: ColorsModule.Colors.on_surface
         elide: Text.ElideRight
         maximumLineCount: 1

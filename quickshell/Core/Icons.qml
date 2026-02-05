@@ -43,4 +43,10 @@ QtObject {
     readonly property string airplane: "󰀝"
     readonly property string dnd: "󰂛"
     readonly property string brightness: "󰃠"
+    readonly property string temperature: "󰔏"
+    readonly property string temperatureLow: "󰔎"
+    readonly property string temperatureMedium: "󰔐"
+    readonly property string fire: "󰈸"
+    readonly property string snowflake: "󰖘"
+
 }

@@ -131,7 +131,17 @@ PanelWindow {
                     onPressed: parent.scale = 0.97
                     onReleased: parent.scale = 1.0
 
-                    onClicked: modelData.popup = false
+                    onClicked: {
+                        if (modelData.actions.length > 0) {
+                            let defaultAction = modelData.actions.find(action => action.id === "default");
+                            if (defaultAction) {
+                                defaultAction.invoke();
+                            } else {
+                                modelData.actions[0].invoke();
+                            }
+                        }
+                        modelData.popup = false;
+                    }
                 }
             }
         }

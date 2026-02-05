@@ -1,5 +1,6 @@
 import QtQuick
 import qs.services as Services
+import qs.Core
 import "../../../colors" as ColorsModule
 
 Rectangle {
@@ -10,7 +11,7 @@ Rectangle {
     Text {
         id: cpu
         anchors.centerIn: parent
-        text: "💻 " + Math.round(Services.System.cpu) + "%"
+        text: Icons.system + " " + Math.round(Services.System.cpu) + "%"
         color: ColorsModule.Colors.on_surface
         font.pixelSize: 17
     }
