@@ -35,7 +35,6 @@ PanelWindow {
 
     Popout {
         anchors.fill: parent
-        anchors.margins: 6
         clip: true
 
         alignment: 6

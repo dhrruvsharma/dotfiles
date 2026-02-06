@@ -8,7 +8,7 @@ Item {
 
     property int alignment: 0
     property int radius: 50
-    property color color: ColorsModule.Colors.primary
+    property color color: ColorsModule.Colors.background
 
     default property alias content: contentWrapper.data
 

@@ -5,26 +5,25 @@ import Quickshell.Io
 import Quickshell.Wayland
 
 PanelWindow {
-    id: mediaPanel
+    id: systemPanel
     property bool opened: false
 
     color: "transparent"
     focusable: true
 
     anchors.top: true
-    margins.top: 0
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
 
-    implicitWidth: opened ? 520 : 0
-    implicitHeight: opened ? 320 : 0
+    implicitWidth: opened ? 550 : 0
+    implicitHeight: opened ? 180 : 0
 
     visible: true
 
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        opacity: mediaPanel.opened ? 1 : 0
+        opacity: systemPanel.opened ? 1 : 0
         visible: opacity > 0
 
         Behavior on opacity {
@@ -48,13 +47,12 @@ PanelWindow {
         Popout {
             anchors.fill: parent
             alignment: 0
-            MediaControl {
-                id: panel
+            SystemGraphs {
+                id: system
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 y: opened ? 0 : -implicitHeight - 30
 
-                opened: mediaPanel.opened
 
                 Behavior on y {
                     NumberAnimation {
@@ -85,9 +83,9 @@ PanelWindow {
     }
 
     IpcHandler {
-        target: "mediaPanel"
+        target: "systemPanel"
         function toggle(): void {
-            mediaPanel.opened = !mediaPanel.opened
+            systemPanel.opened = !systemPanel.opened
         }
     }
 }

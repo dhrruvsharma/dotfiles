@@ -10,8 +10,8 @@ Item {
     id: root
     property bool opened: true
 
-    width: 420
-    height: 110
+    width: 400
+    height: 240
 
     Behavior on y {
         NumberAnimation {
@@ -27,24 +27,12 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: 20
-        color: ColorsModule.Colors.surface_container_high
-        border.color: ColorsModule.Colors.outline_variant
-        border.width: 1
-
-        // Subtle shadow effect
-        layer.enabled: true
-        layer.effect: DropShadow {
-            horizontalOffset: 0
-            verticalOffset: 4
-            radius: 12
-            samples: 25
-            color: "#40000000"
-        }
+        color: ColorsModule.Colors.background
 
         Item {
             anchors.fill: parent
             anchors.margins: 16
-            anchors.topMargin: parent.height - 40
+            anchors.topMargin: parent.height - 2
             opacity: 0.3
             clip: true
 
@@ -69,185 +57,276 @@ Item {
                 }
             }
         }
-        RowLayout {
+
+        ColumnLayout {
             anchors.fill: parent
             anchors.margins: 16
-            spacing: 16
+            spacing: 10
 
-            Rectangle {
-                width: 78
-                height: 78
-                radius: 12
-                color: ColorsModule.Colors.surface_container_highest
-                clip: true
-
-                Image {
-                    anchors.fill: parent
-                    source: Services.Media.artUrl
-                    fillMode: Image.PreserveAspectCrop
-                    smooth: true
-
-                    // Placeholder when no art
-                    Rectangle {
-                        anchors.fill: parent
-                        visible: parent.status !== Image.Ready
-                        color: ColorsModule.Colors.surface_container_highest
-
-                        Text {
-                            anchors.centerIn: parent
-                            text: "🎵"
-                            font.pixelSize: 32
-                            color: ColorsModule.Colors.on_surface_variant
-                        }
-                    }
-                }
-            }
-
-            // Track Info and Progress
-            ColumnLayout {
+            RowLayout {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                spacing: 6
+                spacing: 16
 
-                // Track Title
-                Text {
-                    text: Services.Media.title || "No media playing"
-                    color: ColorsModule.Colors.on_surface
-                    font.pixelSize: 15
-                    font.weight: Font.DemiBold
-                    elide: Text.ElideRight
-                    Layout.fillWidth: true
-                }
+                Rectangle {
+                    width: 72
+                    height: 72
+                    radius: 12
+                    color: ColorsModule.Colors.surface_container_highest
+                    clip: true
 
-                // Artist
-                Text {
-                    text: Services.Media.artist || "Unknown artist"
-                    color: ColorsModule.Colors.on_surface_variant
-                    font.pixelSize: 13
-                    elide: Text.ElideRight
-                    Layout.fillWidth: true
-                }
+                    Image {
+                        anchors.fill: parent
+                        source: Services.Media.artUrl
+                        fillMode: Image.PreserveAspectCrop
+                        smooth: true
 
-                Item { Layout.fillHeight: true }
-
-                // Progress Bar
-                ColumnLayout {
-                    Layout.fillWidth: true
-                    spacing: 4
-
-                    Slider {
-                        id: progressSlider
-                        from: 0
-                        to: Services.Media.length
-                        value: Services.Media.position
-                        Layout.fillWidth: true
-
-                        onMoved: Services.Media.setPosition(value)
-
-                        background: Rectangle {
-                            x: progressSlider.leftPadding
-                            y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
-                            implicitWidth: 200
-                            implicitHeight: 4
-                            width: progressSlider.availableWidth
-                            height: implicitHeight
-                            radius: 2
+                        Rectangle {
+                            anchors.fill: parent
+                            visible: parent.status !== Image.Ready
                             color: ColorsModule.Colors.surface_container_highest
 
-                            Rectangle {
-                                width: progressSlider.visualPosition * parent.width
-                                height: parent.height
-                                color: ColorsModule.Colors.primary
-                                radius: 2
+                            Text {
+                                anchors.centerIn: parent
+                                text: "🎵"
+                                font.pixelSize: 32
+                                color: ColorsModule.Colors.on_surface_variant
                             }
                         }
+                    }
+                }
 
-                        handle: Rectangle {
-                            x: progressSlider.leftPadding + progressSlider.visualPosition * (progressSlider.availableWidth - width)
-                            y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
-                            implicitWidth: 12
-                            implicitHeight: 12
-                            radius: 6
-                            color: progressSlider.pressed ? ColorsModule.Colors.primary_fixed : ColorsModule.Colors.primary
-                            border.color: ColorsModule.Colors.primary_container
-                            border.width: 1
-                        }
+                // Track Info
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 4
+
+                    Text {
+                        text: Services.Media.title || "No media playing"
+                        color: ColorsModule.Colors.on_surface
+                        font.pixelSize: 15
+                        font.weight: Font.DemiBold
+                        elide: Text.ElideRight
+                        Layout.fillWidth: true
                     }
 
-                    // Time labels
-                    RowLayout {
+                    Text {
+                        text: Services.Media.artist || "Unknown artist"
+                        color: ColorsModule.Colors.on_surface_variant
+                        font.pixelSize: 13
+                        elide: Text.ElideRight
                         Layout.fillWidth: true
+                    }
 
-                        Text {
-                            text: formatTime(Services.Media.position)
-                            color: ColorsModule.Colors.on_surface_variant
-                            font.pixelSize: 11
-                        }
+                    Item { Layout.fillHeight: true }
+                }
 
-                        Item { Layout.fillWidth: true }
+                RowLayout {
+                    spacing: 4
 
-                        Text {
-                            text: formatTime(Services.Media.length)
-                            color: ColorsModule.Colors.on_surface_variant
-                            font.pixelSize: 11
+                    Repeater {
+                        model: [
+                            { icon: "⏮", action: function() { Services.Media.previous() } },
+                            { icon: Services.Media.isPlaying ? "⏸" : "▶", action: function() { Services.Media.playPause() } },
+                            { icon: "⏭", action: function() { Services.Media.next() } }
+                        ]
+
+                        Button {
+                            text: modelData.icon
+                            onClicked: modelData.action()
+
+                            implicitWidth: index === 1 ? 44 : 40
+                            implicitHeight: index === 1 ? 44 : 40
+
+                            hoverEnabled: true
+
+                            background: Rectangle {
+                                radius: parent.width / 2
+                                color: index === 1
+                                    ? (parent.hovered ? ColorsModule.Colors.primary_container : ColorsModule.Colors.primary)
+                                    : (parent.hovered ? ColorsModule.Colors.surface_container_highest : "transparent")
+
+                                Behavior on color {
+                                    ColorAnimation { duration: 150 }
+                                }
+                            }
+
+                            contentItem: Text {
+                                text: parent.text
+                                font.pixelSize: index === 1 ? 18 : 16
+                                color: index === 1
+                                    ? ColorsModule.Colors.on_primary
+                                    : ColorsModule.Colors.on_surface
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
                         }
                     }
                 }
             }
 
-            // Media Controls
-            RowLayout {
+            ColumnLayout {
+                Layout.fillWidth: true
                 spacing: 4
-                Layout.rightMargin: 4
 
-                Repeater {
-                    model: [
-                        { icon: "⏮", action: function() { Services.Media.previous() } },
-                        { icon: Services.Media.isPlaying ? "⏸" : "▶", action: function() { Services.Media.playPause() } },
-                        { icon: "⏭", action: function() { Services.Media.next() } }
-                    ]
+                Slider {
+                    id: progressSlider
+                    from: 0
+                    to: Services.Media.length
+                    value: Services.Media.position
+                    Layout.fillWidth: true
 
-                    Button {
-                        text: modelData.icon
-                        onClicked: modelData.action()
+                    onMoved: Services.Media.setPosition(value)
 
-                        implicitWidth: index === 1 ? 44 : 40
-                        implicitHeight: index === 1 ? 44 : 40
+                    background: Rectangle {
+                        x: progressSlider.leftPadding
+                        y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
+                        implicitWidth: 200
+                        implicitHeight: 4
+                        width: progressSlider.availableWidth
+                        height: implicitHeight
+                        radius: 2
+                        color: ColorsModule.Colors.surface_container_highest
 
-                        hoverEnabled: true
-
-                        background: Rectangle {
-                            radius: parent.width / 2
-                            color: index === 1
-                                ? (parent.hovered ? ColorsModule.Colors.primary_container : ColorsModule.Colors.primary)
-                                : (parent.hovered ? ColorsModule.Colors.surface_container_highest : "transparent")
-
-                            Behavior on color {
-                                ColorAnimation { duration: 150 }
-                            }
-                        }
-
-                        contentItem: Text {
-                            text: parent.text
-                            font.pixelSize: index === 1 ? 18 : 16
-                            color: index === 1
-                                ? ColorsModule.Colors.on_primary
-                                : ColorsModule.Colors.on_surface
-                            horizontalAlignment: Text.AlignHCenter
-                            verticalAlignment: Text.AlignVCenter
+                        Rectangle {
+                            width: progressSlider.visualPosition * parent.width
+                            height: parent.height
+                            color: ColorsModule.Colors.primary
+                            radius: 2
                         }
                     }
 
+                    handle: Rectangle {
+                        x: progressSlider.leftPadding + progressSlider.visualPosition * (progressSlider.availableWidth - width)
+                        y: progressSlider.topPadding + progressSlider.availableHeight / 2 - height / 2
+                        implicitWidth: 12
+                        implicitHeight: 12
+                        radius: 6
+                        color: progressSlider.pressed ? ColorsModule.Colors.primary_fixed : ColorsModule.Colors.primary
+                        border.color: ColorsModule.Colors.primary_container
+                        border.width: 1
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Text {
+                        text: formatTime(Services.Media.position)
+                        color: ColorsModule.Colors.on_surface_variant
+                        font.pixelSize: 11
+                    }
+
+                    Item { Layout.fillWidth: true }
+
+                    Text {
+                        text: formatTime(Services.Media.length)
+                        color: ColorsModule.Colors.on_surface_variant
+                        font.pixelSize: 11
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 100
+                radius: 10
+                color: Qt.rgba(ColorsModule.Colors.primary.r,
+                    ColorsModule.Colors.primary.g,
+                    ColorsModule.Colors.primary.b, 0.08)
+                border.color: Qt.rgba(ColorsModule.Colors.primary.r,
+                    ColorsModule.Colors.primary.g,
+                    ColorsModule.Colors.primary.b, 0.2)
+                border.width: 1
+
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 12
+                    spacing: 6
+
+                    Repeater {
+                        model: getLyricsContext()
+
+                        Text {
+                            text: modelData.text
+                            color: modelData.isCurrent
+                                ? ColorsModule.Colors.primary
+                                : ColorsModule.Colors.on_surface_variant
+                            font.pixelSize: modelData.isCurrent ? 14 : 12
+                            font.weight: modelData.isCurrent ? Font.DemiBold : Font.Normal
+                            opacity: modelData.isCurrent ? 1.0 : 0.5
+                            Layout.fillWidth: true
+                            Layout.maximumWidth: parent.width
+                            horizontalAlignment: Text.AlignHCenter
+                            wrapMode: Text.WordWrap
+                            maximumLineCount: 2
+                            lineHeight: 1.1
+
+                            Behavior on opacity {
+                                NumberAnimation { duration: 200 }
+                            }
+
+                            Behavior on font.pixelSize {
+                                NumberAnimation { duration: 200 }
+                            }
+
+                            Behavior on color {
+                                ColorAnimation { duration: 200 }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    // Helper function to format time
     function formatTime(seconds) {
         if (!seconds || seconds < 0) return "0:00"
         var mins = Math.floor(seconds / 60)
         var secs = Math.floor(seconds % 60)
         return mins + ":" + (secs < 10 ? "0" : "") + secs
+    }
+
+    function getLyricsContext() {
+        if (!Services.LyricsService.loaded) {
+            return [{ text: "Loading lyrics...", isCurrent: true }]
+        }
+
+        let lines = Services.LyricsService.lines
+        if (!lines || lines.length === 0) {
+            return [{ text: "♪ No lyrics available ♪", isCurrent: true }]
+        }
+
+        let posMs = Services.Media.position * 1000
+        let currentIndex = -1
+
+        for (let i = lines.length - 1; i >= 0; i--) {
+            if (posMs >= parseInt(lines[i].startTimeMs)) {
+                currentIndex = i
+                break
+            }
+        }
+
+        if (currentIndex === -1) {
+            return [{ text: "♪", isCurrent: true }]
+        }
+
+        let result = []
+
+        if (currentIndex > 0 && lines[currentIndex - 1].words) {
+            result.push({ text: lines[currentIndex - 1].words, isCurrent: false })
+        }
+
+        if (lines[currentIndex].words) {
+            result.push({ text: lines[currentIndex].words, isCurrent: true })
+        } else {
+            result.push({ text: "♪", isCurrent: true })
+        }
+
+        if (currentIndex < lines.length - 1 && lines[currentIndex + 1].words) {
+            result.push({ text: lines[currentIndex + 1].words, isCurrent: false })
+        }
+
+        return result
     }
 }

@@ -61,7 +61,6 @@ Item {
                     id: marqueeRow
                     spacing: 50
 
-                    property bool isClipped: mediaText.implicitWidth > parent.width
 
                     Text {
                         id: mediaText
@@ -74,14 +73,14 @@ Item {
                     }
 
                     Text {
-                        visible: marqueeRow.isClipped
+                        visible: true
                         text: mediaText.text
                         color: ColorsModule.Colors.on_surface
                         font.pixelSize: 17
                     }
 
                     SequentialAnimation {
-                        running: marqueeRow.isClipped
+                        running: true
                         loops: Animation.Infinite
 
                         PauseAnimation { duration: 2000 }

@@ -19,16 +19,12 @@ PanelWindow {
         right: true
     }
 
-    margins {
-        bottom: 40
-    }
-
     color: ColorsModule.Colors.background
 
     property bool opened: false
     property int currentTab: 0
 
-    margins.right: opened ? 10 : -implicitWidth - 20
+    margins.right: opened ? 0 : -implicitWidth - 20
 
     Behavior on margins.right {
         NumberAnimation {

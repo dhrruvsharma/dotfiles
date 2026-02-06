@@ -5,6 +5,7 @@ import qs.modules.control
 import qs.modules.calendar
 import qs.modules.media
 import qs.modules.bar
+import qs.modules.system
 import Quickshell.Io
 import qs.services as Services
 import qs.components
@@ -50,4 +51,6 @@ ShellRoot {
     }
 
     OsdWindow { }
+
+    SystemPanel { }
 }
