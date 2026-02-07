@@ -3,23 +3,13 @@ import QtQuick.Layouts
 import Quickshell
 import qs.modules.bar.components
 
-PanelWindow {
+Item {
     id: topBar
 
-    anchors {
-        top: true
-        left: true
-        right: true
-    }
-
-    margins {
-        left: 20
-        right: 20
-    }
-
     implicitHeight: 42
-    exclusiveZone: implicitHeight
-    color: "transparent"
+    anchors.left: parent.left
+    anchors.right: parent.right
+    focus: true
 
     Item {
         anchors.fill: parent
@@ -28,6 +18,9 @@ PanelWindow {
             anchors {
                 left: parent.left
                 verticalCenter: parent.verticalCenter
+            }
+            Rectangle {
+                implicitWidth: 20
             }
             spacing: 8
             Workspaces {}
@@ -52,6 +45,9 @@ PanelWindow {
             Temp {}
             Memory {}
             SystemTray {}
+            Rectangle {
+                implicitWidth: 20
+            }
         }
     }
 }

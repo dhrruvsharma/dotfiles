@@ -29,35 +29,6 @@ Item {
         radius: 20
         color: ColorsModule.Colors.background
 
-        Item {
-            anchors.fill: parent
-            anchors.margins: 16
-            anchors.topMargin: parent.height - 2
-            opacity: 0.3
-            clip: true
-
-            Row {
-                anchors.fill: parent
-                spacing: 2
-
-                Repeater {
-                    model: Services.Cava.values
-
-                    Rectangle {
-                        width: Math.max(2, parent.width / Services.Cava.barsCount - 2)
-                        height: Math.max(2, modelData * parent.height)
-                        radius: 2
-                        color: ColorsModule.Colors.primary
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        Behavior on height {
-                            NumberAnimation { duration: 60; easing.type: Easing.OutQuad }
-                        }
-                    }
-                }
-            }
-        }
-
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 16
@@ -231,13 +202,14 @@ Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 100
                 radius: 10
-                color: Qt.rgba(ColorsModule.Colors.primary.r,
-                    ColorsModule.Colors.primary.g,
-                    ColorsModule.Colors.primary.b, 0.08)
-                border.color: Qt.rgba(ColorsModule.Colors.primary.r,
-                    ColorsModule.Colors.primary.g,
-                    ColorsModule.Colors.primary.b, 0.2)
-                border.width: 1
+                color: "transparent"
+
+                CavaBars {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    opacity: 0.3
+                    enableShadow: false
+                }
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -250,7 +222,7 @@ Item {
                         Text {
                             text: modelData.text
                             color: modelData.isCurrent
-                                ? ColorsModule.Colors.primary
+                                ? ColorsModule.Colors.on_surface
                                 : ColorsModule.Colors.on_surface_variant
                             font.pixelSize: modelData.isCurrent ? 14 : 12
                             font.weight: modelData.isCurrent ? Font.DemiBold : Font.Normal

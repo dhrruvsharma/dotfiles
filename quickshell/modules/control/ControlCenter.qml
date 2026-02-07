@@ -8,38 +8,42 @@ import "../../colors" as ColorsModule
 import qs.components
 import qs.modules.control
 
-PanelWindow {
+Item {
     id: controlCenter
-    visible: false
-    focusable: true
+    property bool opened: false
+    focus: true
 
-    anchors.left: true
-    anchors.top: true
-    anchors.bottom: true
-    exclusionMode: ExclusionMode.Ignore
-
-    implicitWidth: 400
-    margins.left: 0
-
-    color: "transparent"
+    anchors.left: parent.left
+    anchors.top: parent.top
+    anchors.bottom: parent.bottom
+    property int controlCenterWidth: 400
+    implicitWidth: opened ? 400 : 0
+    x: 0
 
     function run(cmd) {
         proc.exec(cmd)
+    }
+
+    Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 260
+            easing.type: Easing.OutCubic
+        }
     }
 
     Process { id: proc }
 
     FocusScope {
         anchors.fill: parent
-        focus: controlCenter.visible
+        focus: controlCenter.opened
         Keys.onEscapePressed: {
-            controlCenter.visible = false
+            controlCenter.opened = false
         }
 
         Rectangle {
             anchors.fill: parent
             color: "#000000"
-            opacity: controlCenter.visible ? 0.4 : 0
+            opacity: 1
 
             Behavior on opacity {
                 NumberAnimation {
@@ -55,7 +59,7 @@ PanelWindow {
             height: parent.height
             color: "transparent"
 
-            x: controlCenter.visible ? 0 : -width
+            x: controlCenter.opened ? 0 : -width
 
             Behavior on x {
                 NumberAnimation {
@@ -151,7 +155,7 @@ PanelWindow {
     IpcHandler {
         target: "controlCenter"
         function changeVisible(): void {
-            controlCenter.visible = !controlCenter.visible
+            controlCenter.opened = !controlCenter.opened
         }
     }
 }

@@ -6,23 +6,19 @@ import "../colors" as ColorsModule
 import qs.Core
 import QtQuick.Layouts
 
-PanelWindow {
+Item {
     id: root
     visible: Services.Osd.visible
     property var colors: ColorsModule.Colors
 
-    anchors {
-        bottom: true
-    }
-    margins.bottom: Services.Osd.visible ? 80 : 60
-    exclusionMode: ExclusionMode.Ignore
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
+    anchors.bottomMargin: Services.Osd.visible ? 60 : -implicitHeight
 
     implicitWidth: 360
     implicitHeight: 100
-    color: "transparent"  // Make window background transparent
 
-    // Smooth margin animation for slide effect
-    Behavior on margins.bottom {
+    Behavior on y {
         NumberAnimation {
             duration: 250
             easing.type: Easing.OutCubic
@@ -37,11 +33,9 @@ PanelWindow {
         border.width: 1
         opacity: Services.Osd.visible ? 1.0 : 0.0
 
-        // This prevents the white corners
         layer.enabled: true
         layer.smooth: true
 
-        // Fade animation
         Behavior on opacity {
             NumberAnimation {
                 duration: 200

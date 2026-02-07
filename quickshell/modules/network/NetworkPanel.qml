@@ -4,33 +4,42 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import "../../colors" as ColorsModule
+import qs.components
 
-PanelWindow {
+Item {
     id: networkPanel
 
     visible: true
-    focusable: true
+    focus: true
 
     implicitWidth: 380
     implicitHeight: 600
 
-    anchors {
-        bottom: true
-        right: true
-    }
 
-    color: ColorsModule.Colors.background
+    anchors.bottom: parent.bottom
+    anchors.right: parent.right
+    anchors.rightMargin: networkPanel.opened ? 0 : -implicitWidth
+    anchors.bottomMargin: 0
 
     property bool opened: false
     property int currentTab: 0
 
-    margins.right: opened ? 0 : -implicitWidth - 20
-
-    Behavior on margins.right {
+    Behavior on anchors.rightMargin {
         NumberAnimation {
-            duration: 260
+            duration: 300
             easing.type: Easing.OutCubic
         }
+    }
+
+
+    Rectangle {
+        anchors.fill: parent
+        color: ColorsModule.Colors.surface_container
+        border.color: ColorsModule.Colors.outline_variant
+        border.width: 1
+
+        layer.enabled: true
+        layer.smooth: true
     }
 
     FocusScope {
@@ -51,13 +60,13 @@ PanelWindow {
 
             Behavior on scale {
                 NumberAnimation {
-                    duration: 2000
+                    duration: 300
                     easing.type: Easing.OutCubic
                 }
             }
 
             Behavior on opacity {
-                NumberAnimation { duration: 2000 }
+                NumberAnimation { duration: 300 }
             }
 
             Item {
@@ -74,7 +83,7 @@ PanelWindow {
 
                     Behavior on height {
                         NumberAnimation {
-                            duration: 2000
+                            duration: 300
                             easing.type: Easing.OutBack
                             easing.overshoot: 1.2
                         }

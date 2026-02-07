@@ -5,26 +5,20 @@ import Quickshell
 import qs.services as Services
 import "../colors" as ColorsModule
 
-PanelWindow {
+Item {
     id: root
     property bool opened: false
 
     implicitHeight: 600
-    focusable: true
+    focus: true
 
     property int drawerWidth: 380
     implicitWidth: opened ? drawerWidth : 0
 
-    anchors {
-        bottom: true
-        left: true
-    }
+    anchors.bottom: parent.bottom
+    anchors.left: parent.left
 
-    margins {
-        bottom: 350
-    }
-
-    color: "transparent"
+    y: 350
 
     Behavior on implicitWidth {
         NumberAnimation {

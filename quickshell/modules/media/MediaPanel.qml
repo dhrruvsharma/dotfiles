@@ -4,32 +4,27 @@ import qs.components
 import Quickshell.Io
 import Quickshell.Wayland
 
-PanelWindow {
+Rectangle {
     id: mediaPanel
     property bool opened: false
 
     color: "transparent"
-    focusable: true
-
-    anchors.top: true
-    margins.top: 0
-    exclusionMode: ExclusionMode.Ignore
-    WlrLayershell.layer: WlrLayer.Overlay
-
-    implicitWidth: opened ? 520 : 0
+    focus: true
+    implicitWidth: 520
     implicitHeight: opened ? 320 : 0
+    y: 0
+    anchors.horizontalCenter: parent.horizontalCenter
 
-    visible: true
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: 260
+            easing.type: Easing.OutCubic
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        opacity: mediaPanel.opened ? 1 : 0
-        visible: opacity > 0
-
-        Behavior on opacity {
-            NumberAnimation { duration: 300 }
-        }
 
         MouseArea {
             anchors.fill: parent
@@ -60,15 +55,6 @@ PanelWindow {
                     NumberAnimation {
                         duration: 350
                         easing.type: Easing.OutCubic
-                    }
-                }
-
-                opacity: opened ? 1.0 : 0.0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
                     }
                 }
 

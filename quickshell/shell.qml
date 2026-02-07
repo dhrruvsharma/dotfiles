@@ -14,43 +14,100 @@ import qs.Osd
 ShellRoot {
     id: root
 
-    NetworkPanel { }
-    ControlCenter { }
-    NotificationToasts { }
+    NotificationToasts {}
     CalendarWindow { }
-    ClockWindow { }
-    MediaPanel { }
-    CavaPanel { }
-    TopBar { }
-
+    ClockWindow {}
     PanelWindow {
-        id: hoverTrigger
+        id: rootPanel
+        exclusionMode: ExclusionMode.Ignore
+        implicitHeight: screen.height
+        implicitWidth: screen.width
         anchors {
-            left: true
             top: true
             bottom: true
+            left: true
+            right: true
         }
-        implicitWidth: 1
-        implicitHeight: 150
         color: "transparent"
+        focusable: true
 
-        Rectangle {
-            anchors.fill: parent
-            color: "#40000000"
+        MediaPanel {
+            id: mediaPanel
+        }
 
-            TapHandler {
-                onTapped: {
-                    notesDrawer.opened = !notesDrawer.opened
-                }
+        SystemPanel {
+            id: systemPanel
+        }
+
+        NetworkPanel {
+            id: networkPanel
+        }
+
+        OsdWindow { }
+
+        PanelWindow{
+            implicitHeight: 42
+            implicitWidth: 0
+            anchors {
+                top: true
+            }
+            color: "transparent"
+            mask: rootPanel.mask
+        }
+
+        TopBar{
+            id: topBar
+        }
+        NotesDrawer{
+            id: notesDrawer
+        }
+
+        MouseArea {
+            id: notesDrawerTrigger
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.top: parent.top
+            width: 2
+            z: 100
+
+            onClicked: {
+                notesDrawer.opened = !notesDrawer.opened
+            }
+
+            hoverEnabled: true
+
+            Rectangle {
+                anchors.fill: parent
+                color: parent.containsMouse ? "#40FFFFFF" : "transparent"
+                visible: parent.containsMouse
+            }
+        }
+        ControlCenter {
+            id: controlCenter
+        }
+
+        mask: Region{
+            Region{
+                item: mediaPanel
+            }
+            Region{
+                item: systemPanel
+            }
+            Region{
+                item: topBar
+            }
+            Region{
+                item: networkPanel
+            }
+            Region{
+                item: notesDrawer.opened ? notesDrawer : null
+            }
+            Region{
+                item: notesDrawerTrigger
+            }
+            Region{
+                item: controlCenter.opened ? controlCenter : null
             }
         }
     }
-
-    NotesDrawer {
-        id: notesDrawer
-    }
-
-    OsdWindow { }
-
-    SystemPanel { }
 }

@@ -4,82 +4,79 @@ import qs.components
 import Quickshell.Io
 import Quickshell.Wayland
 
-PanelWindow {
+Item {
     id: systemPanel
     property bool opened: false
+    property int currentTab: 0
+    focus: true
+    implicitWidth: 550
+    implicitHeight: opened ? 200 : 0
+    anchors.horizontalCenter: parent.horizontalCenter
 
-    color: "transparent"
-    focusable: true
-
-    anchors.top: true
-    exclusionMode: ExclusionMode.Ignore
-    WlrLayershell.layer: WlrLayer.Overlay
-
-    implicitWidth: opened ? 550 : 0
-    implicitHeight: opened ? 180 : 0
-
-    visible: true
+    Behavior on implicitHeight {
+        NumberAnimation {
+            duration: 260
+            easing.type: Easing.OutCubic
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
         color: "transparent"
-        opacity: systemPanel.opened ? 1 : 0
-        visible: opacity > 0
-
-        Behavior on opacity {
-            NumberAnimation { duration: 300 }
-        }
 
         MouseArea {
             anchors.fill: parent
-            onClicked: mediaPanel.opened = false
+            onClicked: systemPanel.opened = false
         }
     }
 
     FocusScope {
         anchors.fill: parent
-        focus: mediaPanel.opened
+        focus: systemPanel.opened
 
-        Keys.onEscapePressed: {
-            mediaPanel.opened = false
-        }
+        Keys.onEscapePressed: systemPanel.opened = false
 
         Popout {
             anchors.fill: parent
             alignment: 0
-            SystemGraphs {
-                id: system
-                anchors.horizontalCenter: parent.horizontalCenter
 
-                y: opened ? 0 : -implicitHeight - 30
+            Column {
+                anchors.fill: parent
+                spacing: 8
 
+                Row {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 8
 
-                Behavior on y {
-                    NumberAnimation {
-                        duration: 350
-                        easing.type: Easing.OutCubic
+                    TabButton {
+                        text: "System"
+                        active: currentTab === 0
+                        onClicked: currentTab = 0
+                    }
+
+                    TabButton {
+                        text: "Screen"
+                        active: currentTab === 1
+                        onClicked: currentTab = 1
                     }
                 }
 
-                opacity: opened ? 1.0 : 0.0
-
-                Behavior on opacity {
-                    NumberAnimation {
-                        duration: 300
-                        easing.type: Easing.InOutQuad
-                    }
-                }
-
-                scale: opened ? 1.0 : 0.95
-
-                Behavior on scale {
-                    NumberAnimation {
-                        duration: 350
-                        easing.type: Easing.OutCubic
-                    }
+                Loader {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    sourceComponent: currentTab === 0 ? systemTab : screenTab
                 }
             }
         }
+    }
+
+    Component {
+        id: systemTab
+        SystemGraphs { }
+    }
+
+    Component {
+        id: screenTab
+        ScreenTools { }
     }
 
     IpcHandler {
