@@ -3,6 +3,7 @@ import Quickshell
 import qs.components
 import Quickshell.Io
 import Quickshell.Wayland
+import qs.services as Services
 
 Rectangle {
     id: mediaPanel
@@ -11,13 +12,22 @@ Rectangle {
     color: "transparent"
     focus: true
     implicitWidth: 520
-    implicitHeight: opened ? 320 : 0
-    y: 0
+    property int popoutHeight: 320
+    implicitHeight: popoutHeight
+    visible: implicitHeight > 1
+    y: opened ? 0 : -(popoutHeight + 20)  // Use dynamic height instead of fixed -340
     anchors.horizontalCenter: parent.horizontalCenter
+
+    Behavior on y {
+        NumberAnimation {
+            duration: 500
+            easing.type: Easing.OutCubic
+        }
+    }
 
     Behavior on implicitHeight {
         NumberAnimation {
-            duration: 260
+            duration: 300
             easing.type: Easing.OutCubic
         }
     }
@@ -35,6 +45,8 @@ Rectangle {
     FocusScope {
         anchors.fill: parent
         focus: mediaPanel.opened
+        layer.enabled: true
+        layer.smooth: true
 
         Keys.onEscapePressed: {
             mediaPanel.opened = false
@@ -67,13 +79,6 @@ Rectangle {
                     }
                 }
             }
-        }
-    }
-
-    IpcHandler {
-        target: "mediaPanel"
-        function toggle(): void {
-            mediaPanel.opened = !mediaPanel.opened
         }
     }
 }

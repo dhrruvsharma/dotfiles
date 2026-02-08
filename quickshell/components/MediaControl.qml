@@ -11,7 +11,7 @@ Item {
     property bool opened: true
 
     width: 400
-    height: 240
+    height: 120
 
     Behavior on y {
         NumberAnimation {
@@ -50,6 +50,8 @@ Item {
                         source: Services.Media.artUrl
                         fillMode: Image.PreserveAspectCrop
                         smooth: true
+                        asynchronous: true  // Load async to avoid blocking
+                        cache: true         // Cache album art
 
                         Rectangle {
                             anchors.fill: parent
@@ -203,12 +205,19 @@ Item {
                 Layout.preferredHeight: 100
                 radius: 10
                 color: "transparent"
+                visible: true
+
+                Behavior on Layout.preferredHeight {
+                    NumberAnimation { duration: 200 }
+                }
 
                 CavaBars {
                     anchors.fill: parent
                     anchors.margins: 5
                     opacity: 0.3
-                    enableShadow: false
+                    enableShadow: false  // Disable shadow for better performance
+                    barCount: 25       // Reduced from 48
+                    clip: true
                 }
 
                 ColumnLayout {
@@ -217,7 +226,7 @@ Item {
                     spacing: 6
 
                     Repeater {
-                        model: getLyricsContext()
+                        model: root.lyricsModel
 
                         Text {
                             text: modelData.text
@@ -259,14 +268,36 @@ Item {
         return mins + ":" + (secs < 10 ? "0" : "") + secs
     }
 
-    function getLyricsContext() {
+    // Cache lyrics context to avoid recalculating on every frame
+    property var lyricsModel: []
+    property var _lyricsCache: []
+    property int _lastPosition: -1
+
+    Timer {
+        interval: 500   // update twice per second
+        running: true
+        repeat: true
+        onTriggered: updateLyricsContext()
+    }
+
+
+    function updateLyricsContext() {
+        let currentPos = Math.floor(Services.Media.position)
+
+        if (currentPos === _lastPosition)
+            return
+
+        _lastPosition = currentPos
+
         if (!Services.LyricsService.loaded) {
-            return [{ text: "Loading lyrics...", isCurrent: true }]
+            lyricsModel = [{ text: "Loading lyrics...", isCurrent: true }]
+            return
         }
 
         let lines = Services.LyricsService.lines
         if (!lines || lines.length === 0) {
-            return [{ text: "♪ No lyrics available ♪", isCurrent: true }]
+            lyricsModel = [{ text: "♪ No lyrics available ♪", isCurrent: true }]
+            return
         }
 
         let posMs = Services.Media.position * 1000
@@ -280,25 +311,24 @@ Item {
         }
 
         if (currentIndex === -1) {
-            return [{ text: "♪", isCurrent: true }]
+            lyricsModel = [{ text: "♪", isCurrent: true }]
+            return
         }
 
         let result = []
 
-        if (currentIndex > 0 && lines[currentIndex - 1].words) {
+        if (currentIndex > 0 && lines[currentIndex - 1].words)
             result.push({ text: lines[currentIndex - 1].words, isCurrent: false })
-        }
 
-        if (lines[currentIndex].words) {
+        if (lines[currentIndex].words)
             result.push({ text: lines[currentIndex].words, isCurrent: true })
-        } else {
+        else
             result.push({ text: "♪", isCurrent: true })
-        }
 
-        if (currentIndex < lines.length - 1 && lines[currentIndex + 1].words) {
+        if (currentIndex < lines.length - 1 && lines[currentIndex + 1].words)
             result.push({ text: lines[currentIndex + 1].words, isCurrent: false })
-        }
 
-        return result
+        lyricsModel = result
     }
+
 }

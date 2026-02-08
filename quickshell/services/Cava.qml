@@ -8,12 +8,12 @@ Singleton {
 
     property bool running: false
     property var values: []
-    property int barsCount: 48
+    property int barsCount: 32
     property var _parseBuffer: new Array(barsCount)
     property var config: ({
         "general": {
             "bars": barsCount,
-            "framerate": 60,
+            "framerate": 20,
             "autosens": 1,
             "sensitivity": 100,
             "lower_cutoff_freq": 50,
@@ -29,7 +29,7 @@ Singleton {
         },
         "smoothing": {
             "monstercat": 1,
-            "noise_reduction": 77
+            "noise_reduction": 70
         }
     })
 

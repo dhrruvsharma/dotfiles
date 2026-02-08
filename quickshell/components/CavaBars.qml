@@ -10,7 +10,7 @@ Item {
     property int barCount: Services.Cava.barsCount
     property real spacing: 3
     property real corner: 2
-    property bool enableShadow: true  // Add this property
+    property bool enableShadow: true
 
     Component.onCompleted: Services.Cava.running = true
 
@@ -30,29 +30,25 @@ Item {
 
                 radius: root.corner
 
+                // Simplified gradient (slightly faster)
                 gradient: Gradient {
                     GradientStop { position: 0;   color: ColorsModule.Colors.primary_container }
-                    GradientStop { position: 0.6; color: ColorsModule.Colors.primary }
-                    GradientStop { position: 1;   color: ColorsModule.Colors.primary_fixed }
+                    GradientStop { position: 1;   color: ColorsModule.Colors.primary }
                 }
 
-                layer.enabled: root.enableShadow  // Use the property here
-                layer.effect: DropShadow {
-                    radius: 8
-                    samples: 16
+                // Use Glow instead of DropShadow - MUCH faster
+                layer.enabled: root.enableShadow
+                layer.effect: Glow {
+                    radius: 4
+                    samples: 8  // Reduced from DropShadow's 16
                     color: ColorsModule.Colors.primary
-                    horizontalOffset: 0
-                    verticalOffset: 0
+                    spread: 0.2
                 }
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                Behavior on height {
-                    NumberAnimation {
-                        duration: 60
-                        easing.type: Easing.OutQuad
-                    }
-                }
+                // Disable height animations - they cause repaints
+                // The values update fast enough that animation isn't needed
             }
         }
     }

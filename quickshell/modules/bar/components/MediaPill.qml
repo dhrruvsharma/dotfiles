@@ -31,13 +31,6 @@ Item {
 
         implicitWidth: row.implicitWidth + 20
 
-        CavaBars {
-            anchors.fill: parent
-            anchors.margins: 5
-            opacity: 0.5
-            enableShadow: false
-        }
-
         RowLayout {
             id: row
 
@@ -60,7 +53,7 @@ Item {
                 Row {
                     id: marqueeRow
                     spacing: 50
-
+                    anchors.horizontalCenter: mouseArea.containsMouse ? undefined : parent.horizontalCenter
 
                     Text {
                         id: mediaText
@@ -73,14 +66,14 @@ Item {
                     }
 
                     Text {
-                        visible: true
+                        visible: mouseArea.containsMouse
                         text: mediaText.text
                         color: ColorsModule.Colors.on_surface
                         font.pixelSize: 17
                     }
 
                     SequentialAnimation {
-                        running: true
+                        running: mouseArea.containsMouse
                         loops: Animation.Infinite
 
                         PauseAnimation { duration: 2000 }
@@ -104,9 +97,11 @@ Item {
             }
         }
         MouseArea {
+            id: mouseArea
             onClicked: toggleProc.running = true
             anchors.fill: parent
             z: 2
+            hoverEnabled: true
         }
     }
 

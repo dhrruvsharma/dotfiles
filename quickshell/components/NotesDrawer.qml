@@ -9,7 +9,7 @@ Item {
     id: root
     property bool opened: false
 
-    implicitHeight: 600
+    implicitHeight: opened ? 600 : 0
     focus: true
 
     property int drawerWidth: 380
@@ -18,9 +18,16 @@ Item {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
 
-    y: 350
+    y: 0
 
     Behavior on implicitWidth {
+        NumberAnimation {
+            duration: 260
+            easing.type: Easing.OutCubic
+        }
+    }
+
+    Behavior on implicitHeight {
         NumberAnimation {
             duration: 260
             easing.type: Easing.OutCubic
@@ -31,7 +38,7 @@ Item {
         anchors.fill: parent
         clip: true
 
-        alignment: 6
+        alignment: 5
         radius: 22
         color: ColorsModule.Colors.surface_container_high
 

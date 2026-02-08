@@ -31,8 +31,13 @@ ShellRoot {
         color: "transparent"
         focusable: true
 
-        MediaPanel {
-            id: mediaPanel
+        Loader {
+            id: mediaPanelLoader
+            active: false
+            anchors.horizontalCenter: parent.horizontalCenter
+            sourceComponent: MediaPanel {
+                id: mediaPanel
+            }
         }
 
         SystemPanel {
@@ -88,7 +93,7 @@ ShellRoot {
 
         mask: Region{
             Region{
-                item: mediaPanel
+                item: mediaPanelLoader
             }
             Region{
                 item: systemPanel
@@ -110,4 +115,33 @@ ShellRoot {
             }
         }
     }
+
+    Connections {
+        target: mediaPanelLoader.item
+        function onOpenedChanged() {
+            if (!mediaPanelLoader.item.opened) {
+                closeTimer.start()
+            }
+        }
+    }
+
+    Timer {
+        id: closeTimer
+        interval: 600
+        onTriggered: mediaPanelLoader.active = false
+    }
+
+    IpcHandler {
+        target: "mediaPanel"
+
+        function toggle(): void {
+            if (!mediaPanelLoader.active) {
+                mediaPanelLoader.active = true
+                mediaPanelLoader.item.opened = true
+            } else {
+                mediaPanelLoader.item.opened = !mediaPanelLoader.item.opened
+            }
+        }
+    }
+
 }
