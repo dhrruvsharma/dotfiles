@@ -53,7 +53,6 @@ Item {
                 Row {
                     id: marqueeRow
                     spacing: 50
-                    anchors.horizontalCenter: mouseArea.containsMouse ? undefined : parent.horizontalCenter
 
                     Text {
                         id: mediaText
@@ -73,6 +72,7 @@ Item {
                     }
 
                     SequentialAnimation {
+                        id: marqueeAnimation
                         running: mouseArea.containsMouse
                         loops: Animation.Infinite
 
@@ -93,12 +93,22 @@ Item {
                             value: 0
                         }
                     }
+
+                    // Reset position when mouse leaves
+                    Behavior on x {
+                        enabled: !mouseArea.containsMouse
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutCubic
+                        }
+                    }
                 }
             }
         }
         MouseArea {
             id: mouseArea
             onClicked: toggleProc.running = true
+            onExited: marqueeRow.x = 0  // Reset position when mouse leaves
             anchors.fill: parent
             z: 2
             hoverEnabled: true

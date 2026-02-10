@@ -38,14 +38,21 @@ ShellRoot {
             sourceComponent: MediaPanel {
                 id: mediaPanel
             }
+            focus: true
         }
 
         SystemPanel {
             id: systemPanel
         }
 
-        NetworkPanel {
-            id: networkPanel
+        Loader {
+            id: networkPanelLoader
+            active: false
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            sourceComponent: NetworkPanel {
+                id: networkPanel
+            }
         }
 
         OsdWindow { }
@@ -87,13 +94,22 @@ ShellRoot {
                 visible: parent.containsMouse
             }
         }
-        ControlCenter {
-            id: controlCenter
+
+        Loader {
+            active: false
+            id: controlCenterLoader
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            sourceComponent: ControlCenter {
+                id: controlCenter
+            }
+            focus: true
         }
 
         mask: Region{
             Region{
-                item: mediaPanelLoader
+                item: mediaPanelLoader.active ? mediaPanelLoader : null
             }
             Region{
                 item: systemPanel
@@ -101,8 +117,8 @@ ShellRoot {
             Region{
                 item: topBar
             }
-            Region{
-                item: networkPanel
+            Region {
+                item: networkPanelLoader.item ? networkPanelLoader.item : null
             }
             Region{
                 item: notesDrawer.opened ? notesDrawer : null
@@ -111,7 +127,7 @@ ShellRoot {
                 item: notesDrawerTrigger
             }
             Region{
-                item: controlCenter.opened ? controlCenter : null
+                item: controlCenterLoader.active ? controlCenterLoader : null
             }
         }
     }
@@ -140,6 +156,31 @@ ShellRoot {
                 mediaPanelLoader.item.opened = true
             } else {
                 mediaPanelLoader.item.opened = !mediaPanelLoader.item.opened
+            }
+        }
+    }
+
+    IpcHandler {
+        target: "networkPanel"
+
+        function changeVisible(): void {
+            if (!networkPanelLoader.active) {
+                networkPanelLoader.active = true
+                networkPanelLoader.item.opened = true
+            } else {
+                networkPanelLoader.item.opened = !networkPanelLoader.item.opened
+            }
+        }
+    }
+
+    IpcHandler {
+        target: "controlCenter"
+        function changeVisible(): void {
+            if (!controlCenterLoader.active) {
+                controlCenterLoader.active = true
+                controlCenterLoader.item.opened = true
+            } else {
+                controlCenterLoader.item.opened = !controlCenterLoader.item.opened
             }
         }
     }

@@ -7,7 +7,7 @@ import Qt5Compat.GraphicalEffects
 import qs.components
 
 Item {
-    id: root
+    id: mediaControl
     property bool opened: true
 
     width: 400
@@ -50,8 +50,8 @@ Item {
                         source: Services.Media.artUrl
                         fillMode: Image.PreserveAspectCrop
                         smooth: true
-                        asynchronous: true  // Load async to avoid blocking
-                        cache: true         // Cache album art
+                        asynchronous: true
+                        cache: true
 
                         Rectangle {
                             anchors.fill: parent
@@ -215,8 +215,8 @@ Item {
                     anchors.fill: parent
                     anchors.margins: 5
                     opacity: 0.3
-                    enableShadow: false  // Disable shadow for better performance
-                    barCount: 25       // Reduced from 48
+                    enableShadow: false
+                    barCount: 25
                     clip: true
                 }
 
@@ -226,7 +226,8 @@ Item {
                     spacing: 6
 
                     Repeater {
-                        model: root.lyricsModel
+                        id: lyricsRepeater
+                        model: lyricsModel
 
                         Text {
                             text: modelData.text
@@ -261,31 +262,40 @@ Item {
         }
     }
 
-    function formatTime(seconds) {
-        if (!seconds || seconds < 0) return "0:00"
-        var mins = Math.floor(seconds / 60)
-        var secs = Math.floor(seconds % 60)
-        return mins + ":" + (secs < 10 ? "0" : "") + secs
-    }
-
-    // Cache lyrics context to avoid recalculating on every frame
+    // Store the model as a property instead of calling a function in the binding
     property var lyricsModel: []
-    property var _lyricsCache: []
     property int _lastPosition: -1
 
-    Timer {
-        interval: 500   // update twice per second
-        running: true
-        repeat: true
-        onTriggered: updateLyricsContext()
+    // Update lyrics model when position changes
+    Connections {
+        target: Services.Media
+        function onPositionChanged() {
+            updateLyricsModel()
+        }
     }
 
+    // Update when lyrics are loaded
+    Connections {
+        target: Services.LyricsService
+        function onLoadedChanged() {
+            updateLyricsModel()
+        }
+        function onLinesChanged() {
+            updateLyricsModel()
+        }
+    }
 
-    function updateLyricsContext() {
+    Component.onCompleted: {
+        updateLyricsModel()
+    }
+
+    function updateLyricsModel() {
         let currentPos = Math.floor(Services.Media.position)
 
-        if (currentPos === _lastPosition)
+        // Only recalculate if position changed significantly
+        if (Math.abs(currentPos - _lastPosition) < 1 && lyricsModel.length > 0) {
             return
+        }
 
         _lastPosition = currentPos
 
@@ -317,18 +327,27 @@ Item {
 
         let result = []
 
-        if (currentIndex > 0 && lines[currentIndex - 1].words)
+        if (currentIndex > 0 && lines[currentIndex - 1].words) {
             result.push({ text: lines[currentIndex - 1].words, isCurrent: false })
+        }
 
-        if (lines[currentIndex].words)
+        if (lines[currentIndex].words) {
             result.push({ text: lines[currentIndex].words, isCurrent: true })
-        else
+        } else {
             result.push({ text: "♪", isCurrent: true })
+        }
 
-        if (currentIndex < lines.length - 1 && lines[currentIndex + 1].words)
+        if (currentIndex < lines.length - 1 && lines[currentIndex + 1].words) {
             result.push({ text: lines[currentIndex + 1].words, isCurrent: false })
+        }
 
         lyricsModel = result
     }
 
+    function formatTime(seconds) {
+        if (!seconds || seconds < 0) return "0:00"
+        var mins = Math.floor(seconds / 60)
+        var secs = Math.floor(seconds % 60)
+        return mins + ":" + (secs < 10 ? "0" : "") + secs
+    }
 }

@@ -151,11 +151,4 @@ Item {
             }
         }
     }
-
-    IpcHandler {
-        target: "controlCenter"
-        function changeVisible(): void {
-            controlCenter.opened = !controlCenter.opened
-        }
-    }
 }

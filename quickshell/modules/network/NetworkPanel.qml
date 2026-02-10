@@ -181,11 +181,4 @@ Item {
         BluetoothPanel { }
     }
 
-    IpcHandler {
-        target: "networkPanel"
-
-        function changeVisible(): void {
-            networkPanel.opened = !networkPanel.opened
-        }
-    }
 }
