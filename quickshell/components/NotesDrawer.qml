@@ -296,7 +296,7 @@ Item {
                         model: Services.Notes.getNotesForCategory(Services.Notes.currentCategory)
 
                         delegate: Rectangle {
-                            Layout.fillWidth: true
+                            width: 500
                             Layout.preferredHeight: Math.max(noteText.contentHeight + 28, 54)
                             Layout.minimumHeight: 54
 
@@ -330,67 +330,66 @@ Item {
                                 Text {
                                     id: noteText
                                     text: modelData.text
-                                    width: 650
-                                    wrapMode: Text.WordWrap
-
-                                    Layout.fillWidth: true
-                                    Layout.alignment: Qt.AlignVCenter
-
+                                    Layout.fillWidth: false
+                                    Layout.maximumWidth: 400
                                     color: ColorsModule.Colors.on_surface
                                     font.pixelSize: 14
                                     lineHeight: 1.4
+                                    elide: Text.ElideRight
+                                    wrapMode: Text.Wrap
+                                }
 
-                                    Button {
-                                        id: deleteButton
-                                        Layout.preferredWidth: 32
-                                        Layout.preferredHeight: 32
-                                        Layout.alignment: Qt.AlignVCenter
-                                        x: 400
 
-                                        flat: true
-                                        hoverEnabled: true
+                                Button {
+                                    id: deleteButton
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 32
+                                    Layout.alignment: Qt.AlignTop
+                                    Layout.topMargin: 0
 
-                                        contentItem: Text {
-                                            text: "×"
-                                            font.pixelSize: 20
-                                            font.weight: Font.Bold
-                                            anchors.centerIn: parent
-                                            color: deleteButton.hovered || deleteButton.pressed
-                                                ? ColorsModule.Colors.error
-                                                : ColorsModule.Colors.on_surface_variant
+                                    flat: true
+                                    hoverEnabled: true
 
-                                            Behavior on color {
-                                                ColorAnimation { duration: 150 }
-                                            }
+                                    contentItem: Text {
+                                        text: "×"
+                                        font.pixelSize: 20
+                                        font.weight: Font.Bold
+                                        anchors.centerIn: parent
+                                        color: deleteButton.hovered || deleteButton.pressed
+                                            ? ColorsModule.Colors.error
+                                            : ColorsModule.Colors.on_surface_variant
+
+                                        Behavior on color {
+                                            ColorAnimation { duration: 150 }
+                                        }
+                                    }
+
+                                    background: Rectangle {
+                                        radius: 16
+                                        color: deleteButton.hovered || deleteButton.pressed
+                                            ? ColorsModule.Colors.error_container
+                                            : ColorsModule.Colors.surface_container_low
+
+                                        border.color: deleteButton.hovered || deleteButton.pressed
+                                            ? ColorsModule.Colors.error
+                                            : "transparent"
+                                        border.width: 1
+
+                                        Behavior on color {
+                                            ColorAnimation { duration: 150 }
                                         }
 
-                                        background: Rectangle {
-                                            radius: 16
-                                            color: deleteButton.hovered || deleteButton.pressed
-                                                ? ColorsModule.Colors.error_container
-                                                : ColorsModule.Colors.surface_container_low
-
-                                            border.color: deleteButton.hovered || deleteButton.pressed
-                                                ? ColorsModule.Colors.error
-                                                : "transparent"
-                                            border.width: 1
-
-                                            Behavior on color {
-                                                ColorAnimation { duration: 150 }
-                                            }
-
-                                            Behavior on border.color {
-                                                ColorAnimation { duration: 150 }
-                                            }
+                                        Behavior on border.color {
+                                            ColorAnimation { duration: 150 }
                                         }
+                                    }
 
-                                        onClicked: {
-                                            var allNotes = Services.Notes.notes
-                                            for (var i = 0; i < allNotes.length; i++) {
-                                                if (allNotes[i].id === modelData.id) {
-                                                    Services.Notes.remove(i)
-                                                    break
-                                                }
+                                    onClicked: {
+                                        var allNotes = Services.Notes.notes
+                                        for (var i = 0; i < allNotes.length; i++) {
+                                            if (allNotes[i].id === modelData.id) {
+                                                Services.Notes.remove(i)
+                                                break
                                             }
                                         }
                                     }
