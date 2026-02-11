@@ -1,7 +1,7 @@
 pragma Singleton
 import QtQuick
 import QtCore
-
+import Quickshell.Io
 QtObject {
     id: root
 
@@ -77,6 +77,11 @@ QtObject {
         save()
     }
 
+    function copy(text) {
+        console.log(text);
+        copyProc.exec([`/usr/bin/wl-copy`,text])
+    }
+
     function removeCategory(categoryName) {
         if (categoryName === "notes") return // Cannot remove default category
 
@@ -110,6 +115,10 @@ QtObject {
         return notes.filter(function(note) {
             return note.category === categoryName
         })
+    }
+
+    property Process copyProc: Process {
+        id: copyProc
     }
 
     Component.onCompleted: load()

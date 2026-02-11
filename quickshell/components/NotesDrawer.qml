@@ -9,261 +9,307 @@ Item {
     id: root
     property bool opened: false
 
-    implicitHeight: opened ? 600 : 0
+    implicitHeight: opened ? 700 : 0
     implicitWidth: opened ? drawerWidth : 0
-    property int drawerWidth: 600
+    property int drawerWidth: 640
 
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     focus: true
 
     Behavior on implicitWidth {
-        NumberAnimation { duration: 300; easing.type: Easing.InOutCubic }
+        NumberAnimation {
+            duration: 350
+            easing.type: Easing.OutCubic
+            property: "width"
+        }
     }
     Behavior on implicitHeight {
-        NumberAnimation { duration: 300; easing.type: Easing.InOutCubic }
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        visible: root.opened
-        radius: 24
-        color: ColorsModule.Colors.surface_container_high
+        NumberAnimation {
+            duration: 350
+            easing.type: Easing.OutCubic
+            property: "height"
+        }
     }
 
     Popout {
+        id: popoutBackground
         anchors.fill: parent
         clip: true
         alignment: 5
-        radius: 24
-        color: ColorsModule.Colors.surface_container_high
+        radius: 32
+        color: ColorsModule.Colors.surface_container_lowest
+
+        Rectangle {
+            anchors.fill: parent
+            radius: parent.radius
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Qt.rgba(151, 204, 249, 0.02) }
+                GradientStop { position: 1.0; color: "transparent" }
+            }
+        }
+
+        Rectangle {
+            width: 120
+            height: 3
+            anchors.top: parent.top
+            anchors.topMargin: -1.5
+            anchors.horizontalCenter: parent.horizontalCenter
+            radius: 1.5
+            color: ColorsModule.Colors.primary
+            opacity: 0.6
+        }
 
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 24
             spacing: 16
 
-            /* HEADER */
-            RowLayout {
-                Layout.fillWidth: true
-                spacing: 12
-
-                Rectangle {
-                    Layout.preferredWidth: 4
-                    Layout.preferredHeight: 24
-                    Layout.alignment: Qt.AlignVCenter
-                    radius: 2
-                    color: ColorsModule.Colors.primary
-                }
-
-                Text {
-                    text: "Notes"
-                    font.pixelSize: 24
-                    font.weight: Font.DemiBold
-                    color: ColorsModule.Colors.on_surface
-                    Layout.alignment: Qt.AlignVCenter
-                }
-
-                Item { Layout.fillWidth: true }
-
-                Rectangle {
-                    Layout.preferredHeight: 28
-                    Layout.preferredWidth: countText.contentWidth + 16
-                    Layout.alignment: Qt.AlignVCenter
-                    radius: 14
-                    color: ColorsModule.Colors.tertiary_container
-                    visible: Services.Notes.getNotesForCategory(
-                        Services.Notes.currentCategory).length > 0
-
-                    Text {
-                        id: countText
-                        anchors.centerIn: parent
-                        text: Services.Notes.getNotesForCategory(
-                            Services.Notes.currentCategory).length
-                        font.pixelSize: 12
-                        font.weight: Font.Medium
-                        color: ColorsModule.Colors.on_tertiary_container
-                    }
-                }
-
-                Button {
-                    Layout.preferredWidth: 36
-                    Layout.preferredHeight: 36
-                    Layout.alignment: Qt.AlignVCenter
-                    flat: true
-
-                    contentItem: Text {
-                        text: "+"
-                        font.pixelSize: 22
-                        font.weight: Font.Bold
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        anchors.fill: parent
-                    }
-
-                    background: Rectangle {
-                        radius: 18
-                        color: parent.hovered || parent.pressed
-                            ? Qt.darker(ColorsModule.Colors.primary_container, 1.1)
-                            : ColorsModule.Colors.primary_container
-                    }
-
-                    onClicked: categoryDialog.open()
-                }
-            }
-
+            /* FIXED HEADER */
             Rectangle {
                 Layout.fillWidth: true
-                height: 1
-                color: ColorsModule.Colors.outline_variant
-                opacity: 0.5
-            }
+                Layout.preferredHeight: 56
+                radius: 20
+                color: ColorsModule.Colors.surface_container
+                border.width: 1
+                border.color: ColorsModule.Colors.outline_variant
+                opacity: 0.8
 
-            /* CATEGORY TABS */
-            ScrollView {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 44
-                ScrollBar.vertical.policy: ScrollBar.AlwaysOff
-                ScrollBar.horizontal.policy: ScrollBar.AsNeeded
-                clip: true
+                // Subtle shadow effect
+                Rectangle {
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: "transparent"
+                    border.width: 1
+                    border.color: Qt.rgba(255, 255, 255, 0.05)
+                }
 
                 RowLayout {
-                    spacing: 10
+                    anchors.fill: parent
+                    anchors.leftMargin: 16
+                    anchors.rightMargin: 16
+                    spacing: 16
 
-                    Repeater {
-                        model: Services.Notes.categories
+                    // FIXED: Use RowLayout with proper vertical centering instead of nested ColumnLayout
+                    Text {
+                        text: "Quick Notes"
+                        font.pixelSize: 18
+                        font.weight: Font.Bold
+                        color: ColorsModule.Colors.on_surface
+                        Layout.alignment: Qt.AlignVCenter
+                    }
 
-                        delegate: Rectangle {
-                            Layout.preferredHeight: 36
-                            Layout.alignment: Qt.AlignVCenter
-                            Layout.preferredWidth:
-                                categoryText.implicitWidth +
-                                (modelData === "notes" ? 28 : 40)
+                    Item { Layout.fillWidth: true }
 
+                    // Notes counter with enhanced styling
+                    Rectangle {
+                        Layout.preferredHeight: 36
+                        Layout.preferredWidth: Math.max(36, countText.contentWidth + 24)
+                        Layout.alignment: Qt.AlignVCenter
+                        radius: 18
+                        color: ColorsModule.Colors.primary_container
+                        opacity: Services.Notes.getNotesForCategory(
+                            Services.Notes.currentCategory).length > 0 ? 1 : 0.4
+
+                        Behavior on opacity {
+                            NumberAnimation { duration: 200 }
+                        }
+
+                        // Inner accent
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: parent.radius
+                            gradient: Gradient {
+                                GradientStop { position: 0.0; color: Qt.rgba(151, 204, 249, 0.1) }
+                                GradientStop { position: 1.0; color: "transparent" }
+                            }
+                        }
+
+                        Text {
+                            id: countText
+                            anchors.centerIn: parent
+                            text: Services.Notes.getNotesForCategory(
+                                Services.Notes.currentCategory).length
+                            font.pixelSize: 14
+                            font.weight: Font.DemiBold
+                            color: ColorsModule.Colors.on_primary_container
+                        }
+                    }
+
+                    // Enhanced add category button
+                    Button {
+                        id: addCategoryBtn
+                        Layout.preferredWidth: 36
+                        Layout.preferredHeight: 36
+                        Layout.alignment: Qt.AlignVCenter
+                        flat: true
+
+                        contentItem: Text {
+                            text: "+"
+                            font.pixelSize: 20
+                            font.weight: Font.Bold
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: ColorsModule.Colors.on_primary
+                        }
+
+                        background: Rectangle {
                             radius: 18
-                            color: Services.Notes.currentCategory === modelData
-                                ? ColorsModule.Colors.primary_container
-                                : ColorsModule.Colors.surface_container_highest
+                            color: addCategoryBtn.hovered
+                                ? Qt.darker(ColorsModule.Colors.primary_container, 1.2)
+                                : ColorsModule.Colors.primary_container
 
-                            border.color: Services.Notes.currentCategory === modelData
-                                ? ColorsModule.Colors.primary
-                                : "transparent"
-                            border.width: 2
-
-                            MouseArea {
+                            // Accent border
+                            Rectangle {
                                 anchors.fill: parent
-                                hoverEnabled: true
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: Services.Notes.setCurrentCategory(modelData)
+                                radius: parent.radius
+                                color: "transparent"
+                                border.width: 1
+                                border.color: Qt.rgba(151, 204, 249, 0.2)
                             }
 
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.leftMargin: 14
-                                anchors.rightMargin: 8
-                                spacing: 6
+                            Behavior on color {
+                                ColorAnimation { duration: 200 }
+                            }
+                        }
 
-                                Text {
-                                    id: categoryText
-                                    text: modelData.charAt(0).toUpperCase()
-                                        + modelData.slice(1)
-                                    Layout.alignment: Qt.AlignVCenter
-                                    color: Services.Notes.currentCategory === modelData
-                                        ? ColorsModule.Colors.on_primary_container
-                                        : ColorsModule.Colors.on_surface
-                                    font.pixelSize: 14
-                                }
+                        onClicked: categoryDialog.open()
 
-                                Button {
-                                    visible: modelData !== "notes"
-                                    Layout.preferredWidth: 24
-                                    Layout.preferredHeight: 24
-                                    Layout.alignment: Qt.AlignVCenter
-                                    flat: true
-
-                                    contentItem: Text {
-                                        text: "×"
-                                        font.pixelSize: 16
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        anchors.fill: parent
-                                    }
-
-                                    onClicked:
-                                        Services.Notes.removeCategory(modelData)
-                                }
+                        ToolTip {
+                            text: "Add new category"
+                            delay: 300
+                            visible: parent.hovered
+                            background: Rectangle {
+                                radius: 6
+                                color: ColorsModule.Colors.surface_container_highest
+                                border.width: 1
+                                border.color: ColorsModule.Colors.outline_variant
                             }
                         }
                     }
                 }
             }
 
-            /* NOTES LIST */
-            ScrollView {
+            /* ENHANCED CATEGORY TABS */
+            Rectangle {
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                clip: true
+                Layout.preferredHeight: 44
+                radius: 16
+                color: ColorsModule.Colors.surface_container
+                border.width: 1
+                border.color: ColorsModule.Colors.outline_variant
+                opacity: 0.6
 
-                ColumnLayout {
-                    width: parent.width
-                    spacing: 12
+                ScrollView {
+                    anchors.fill: parent
+                    anchors.margins: 4
+                    ScrollBar.vertical.policy: ScrollBar.AlwaysOff
+                    ScrollBar.horizontal.policy: ScrollBar.AsNeeded
+                    clip: true
 
-                    Repeater {
-                        model: Services.Notes.getNotesForCategory(
-                            Services.Notes.currentCategory)
+                    RowLayout {
+                        spacing: 8
+                        height: parent.height
 
-                        delegate: Rectangle {
-                            Layout.fillWidth: true
-                            Layout.minimumHeight: 54
-                            Layout.preferredHeight:
-                                Math.max(noteText.implicitHeight + 28, 54)
+                        Repeater {
+                            model: Services.Notes.categories
 
-                            radius: 14
-                            color: ColorsModule.Colors.surface_container_highest
-                            border.color: ColorsModule.Colors.outline_variant
+                            delegate: Rectangle {
+                                id: categoryTab
+                                Layout.preferredHeight: 36
+                                Layout.alignment: Qt.AlignVCenter
+                                Layout.preferredWidth:
+                                    categoryText.implicitWidth + (modelData === "notes" ? 24 : 40)
 
-                            RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 14
-                                spacing: 12
+                                radius: 18
+                                color: Services.Notes.currentCategory === modelData
+                                    ? ColorsModule.Colors.primary
+                                    : mouseArea.containsMouse
+                                        ? ColorsModule.Colors.surface_container_highest
+                                        : ColorsModule.Colors.surface_container
 
+                                // Active tab accent
                                 Rectangle {
-                                    Layout.preferredWidth: 6
-                                    Layout.preferredHeight: 6
-                                    Layout.alignment: Qt.AlignTop
-                                    radius: 3
-                                    color: ColorsModule.Colors.primary
+                                    anchors.fill: parent
+                                    radius: parent.radius
+                                    color: "transparent"
+                                    border.width: Services.Notes.currentCategory === modelData ? 2 : 0
+                                    border.color: ColorsModule.Colors.primary
+                                    opacity: 0.5
                                 }
 
-                                Text {
-                                    id: noteText
-                                    text: modelData.text
-                                    Layout.fillWidth: true
-                                    wrapMode: Text.Wrap
-                                    color: ColorsModule.Colors.on_surface
-                                    font.pixelSize: 14
+                                // Hover effect
+                                scale: mouseArea.containsMouse ? 1.05 : 1.0
+                                z: mouseArea.containsMouse ? 1 : 0
+                                Behavior on scale {
+                                    NumberAnimation { duration: 150 }
+                                }
+                                Behavior on color {
+                                    ColorAnimation { duration: 200 }
                                 }
 
-                                Button {
-                                    Layout.preferredWidth: 32
-                                    Layout.preferredHeight: 32
-                                    Layout.alignment: Qt.AlignTop
-                                    flat: true
+                                MouseArea {
+                                    id: mouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: Services.Notes.setCurrentCategory(modelData)
+                                }
 
-                                    contentItem: Text {
-                                        text: "×"
-                                        font.pixelSize: 18
-                                        horizontalAlignment: Text.AlignHCenter
-                                        verticalAlignment: Text.AlignVCenter
-                                        anchors.fill: parent
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 12
+                                    anchors.rightMargin: modelData === "notes" ? 12 : 8
+                                    spacing: 6
+
+                                    Text {
+                                        id: categoryText
+                                        text: modelData.charAt(0).toUpperCase() + modelData.slice(1)
+                                        Layout.alignment: Qt.AlignVCenter
+                                        color: Services.Notes.currentCategory === modelData
+                                            ? ColorsModule.Colors.on_primary
+                                            : ColorsModule.Colors.on_surface
+                                        font.pixelSize: 13
+                                        font.weight: Font.Medium
                                     }
 
-                                    onClicked: {
-                                        var allNotes = Services.Notes.notes
-                                        for (var i = 0; i < allNotes.length; i++) {
-                                            if (allNotes[i].id === modelData.id) {
-                                                Services.Notes.remove(i)
-                                                break
+                                    Button {
+                                        visible: modelData !== "notes"
+                                        Layout.preferredWidth: 20
+                                        Layout.preferredHeight: 20
+                                        Layout.alignment: Qt.AlignVCenter
+                                        flat: true
+                                        opacity: mouseArea.containsMouse ? 1 : 0.6
+
+                                        contentItem: Text {
+                                            text: "×"
+                                            font.pixelSize: 16
+                                            font.weight: Font.Bold
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                            color: Services.Notes.currentCategory === modelData
+                                                ? ColorsModule.Colors.on_primary
+                                                : ColorsModule.Colors.on_surface
+                                        }
+
+                                        background: Rectangle {
+                                            radius: 10
+                                            color: parent.hovered
+                                                ? Qt.rgba(255, 255, 255, 0.2)
+                                                : "transparent"
+                                        }
+
+                                        onClicked: Services.Notes.removeCategory(modelData)
+
+                                        ToolTip {
+                                            text: "Remove category"
+                                            delay: 500
+                                            visible: parent.hovered
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: ColorsModule.Colors.surface_container_highest
+                                                border.width: 1
+                                                border.color: ColorsModule.Colors.outline_variant
                                             }
                                         }
                                     }
@@ -274,43 +320,334 @@ Item {
                 }
             }
 
-            /* INPUT ROW */
-            RowLayout {
+            /* ENHANCED NOTES LIST */
+            Rectangle {
                 Layout.fillWidth: true
-                spacing: 12
+                Layout.fillHeight: true
+                radius: 20
+                color: ColorsModule.Colors.surface_container
+                border.width: 1
+                border.color: ColorsModule.Colors.outline_variant
 
-                TextField {
-                    id: inputField
-                    Layout.fillWidth: true
-                    placeholderText:
-                        "Add note to " + Services.Notes.currentCategory + "..."
-                    font.pixelSize: 14
-
-                    onAccepted: {
-                        if (text.trim().length === 0) return
-                        Services.Notes.add(text)
-                        text = ""
-                    }
+                // Container shadow effect
+                Rectangle {
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: "transparent"
+                    border.width: 1
+                    border.color: Qt.rgba(255, 255, 255, 0.05)
                 }
 
-                Button {
-                    Layout.preferredWidth: 48
-                    Layout.preferredHeight: 48
-                    Layout.alignment: Qt.AlignVCenter
-                    enabled: inputField.text.trim().length > 0
+                ScrollView {
+                    anchors.fill: parent
+                    anchors.margins: 1
+                    clip: true
+                    ScrollBar.vertical.visible: true
 
-                    contentItem: Text {
-                        text: "↵"
-                        font.pixelSize: 20
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        anchors.fill: parent
+                    ColumnLayout {
+                        width: parent.width - 20
+                        spacing: 12
+                        anchors.margins: 12
+
+                        Repeater {
+                            model: Services.Notes.getNotesForCategory(
+                                Services.Notes.currentCategory)
+
+                            delegate: Rectangle {
+                                id: noteCard
+                                Layout.fillWidth: true
+                                Layout.minimumHeight: 72
+                                Layout.preferredHeight:
+                                    Math.max(noteText.implicitHeight + 40, 72)
+
+                                radius: 16
+                                color: ColorsModule.Colors.surface_container_high
+
+                                // Card border and shadow
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: parent.radius
+                                    color: "transparent"
+                                    border.width: 1
+                                    border.color: noteMouseArea.containsMouse
+                                        ? ColorsModule.Colors.primary
+                                        : Qt.rgba(255, 255, 255, 0.05)
+                                    opacity: noteMouseArea.containsMouse ? 0.3 : 0.1
+                                }
+
+                                // Hover effect
+                                scale: noteMouseArea.containsMouse ? 1.02 : 1.0
+                                z: noteMouseArea.containsMouse ? 1 : 0
+
+                                Behavior on scale {
+                                    NumberAnimation { duration: 200 }
+                                }
+
+                                MouseArea {
+                                    id: noteMouseArea
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    cursorShape: Qt.PointingHandCursor
+                                }
+
+                                RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 20
+                                    spacing: 16
+
+                                    // Enhanced note indicator with animation
+                                    Rectangle {
+                                        id: noteIndicator
+                                        Layout.preferredWidth: 12
+                                        Layout.preferredHeight: 12
+                                        Layout.alignment: Qt.AlignTop
+                                        radius: 6
+                                        color: ColorsModule.Colors.primary
+
+                                        // Size pulse animation
+                                        SequentialAnimation on scale {
+                                            loops: Animation.Infinite
+                                            running: true
+                                            NumberAnimation { to: 1.3; duration: 1500; easing.type: Easing.InOutQuad }
+                                            NumberAnimation { to: 1.0; duration: 1500; easing.type: Easing.InOutQuad }
+                                        }
+                                    }
+
+                                    // Enhanced note content
+                                    ColumnLayout {
+                                        spacing: 6
+                                        Layout.fillWidth: true
+                                        Layout.alignment: Qt.AlignVCenter
+
+                                        Text {
+                                            id: noteText
+                                            text: modelData.text
+                                            Layout.fillWidth: true
+                                            wrapMode: Text.Wrap
+                                            color: ColorsModule.Colors.on_surface
+                                            font.pixelSize: 14
+                                            lineHeight: 1.5
+                                            font.weight: Font.Normal
+                                        }
+                                    }
+
+                                    // FIXED: Copy to clipboard button
+                                    Button {
+                                        id: copyBtn
+                                        Layout.preferredWidth: 32
+                                        Layout.preferredHeight: 32
+                                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                        flat: true
+                                        opacity: noteMouseArea.containsMouse ? 1 : 0.5
+
+                                        property bool copied: false
+
+                                        contentItem: Text {
+                                            text: copyBtn.copied ? "✓" : "⎘"
+                                            font.pixelSize: 16
+                                            font.family: "monospace"
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                            color: copyBtn.copied
+                                                ? ColorsModule.Colors.primary
+                                                : ColorsModule.Colors.on_surface
+                                        }
+
+                                        background: Rectangle {
+                                            radius: 16
+                                            color: copyBtn.hovered
+                                                ? copyBtn.copied
+                                                    ? ColorsModule.Colors.primary_container
+                                                    : ColorsModule.Colors.surface_container_highest
+                                                : "transparent"
+                                            border.width: 1
+                                            border.color: copyBtn.hovered
+                                                ? copyBtn.copied
+                                                    ? ColorsModule.Colors.primary
+                                                    : ColorsModule.Colors.outline_variant
+                                                : "transparent"
+                                        }
+
+                                        onClicked: {
+                                            Services.Notes.copy(modelData.text)
+                                            copyBtn.copied = true
+                                            copyTimer.start()
+                                        }
+
+                                        Timer {
+                                            id: copyTimer
+                                            interval: 1500
+                                            onTriggered: copyBtn.copied = false
+                                        }
+
+                                        ToolTip {
+                                            text: copyBtn.copied ? "Copied!" : "Copy to clipboard"
+                                            delay: 300
+                                            visible: parent.hovered
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: ColorsModule.Colors.surface_container_highest
+                                                border.width: 1
+                                                border.color: ColorsModule.Colors.outline_variant
+                                            }
+                                        }
+                                    }
+
+                                    Button {
+                                        id: deleteBtn
+                                        Layout.preferredWidth: 32
+                                        Layout.preferredHeight: 32
+                                        Layout.alignment: Qt.AlignTop | Qt.AlignRight
+                                        flat: true
+                                        opacity: noteMouseArea.containsMouse ? 1 : 0.4
+
+                                        contentItem: Text {
+                                            text: "🗑"
+                                            font.pixelSize: 16
+                                            horizontalAlignment: Text.AlignHCenter
+                                            verticalAlignment: Text.AlignVCenter
+                                            color: ColorsModule.Colors.on_surface
+                                        }
+
+                                        background: Rectangle {
+                                            radius: 16
+                                            color: deleteBtn.hovered
+                                                ? ColorsModule.Colors.error_container
+                                                : "transparent"
+                                            border.width: 1
+                                            border.color: deleteBtn.hovered
+                                                ? ColorsModule.Colors.error
+                                                : "transparent"
+                                        }
+
+                                        onClicked: {
+                                            var allNotes = Services.Notes.notes
+                                            for (var i = 0; i < allNotes.length; i++) {
+                                                if (allNotes[i].id === modelData.id) {
+                                                    Services.Notes.remove(i)
+                                                    break
+                                                }
+                                            }
+                                        }
+
+                                        ToolTip {
+                                            text: "Delete note"
+                                            delay: 300
+                                            visible: parent.hovered
+                                            background: Rectangle {
+                                                radius: 6
+                                                color: ColorsModule.Colors.surface_container_highest
+                                                border.width: 1
+                                                border.color: ColorsModule.Colors.outline_variant
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 60
+                radius: 20
+                color: ColorsModule.Colors.surface_container_high
+                border.color: inputField.activeFocus
+                    ? ColorsModule.Colors.primary
+                    : ColorsModule.Colors.outline_variant
+                border.width: 2
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: parent.radius
+                    color: "transparent"
+                    border.width: 1
+                    border.color: Qt.rgba(0, 0, 0, 0.1)
+                }
+
+                RowLayout {
+                    anchors.fill: parent
+                    anchors.leftMargin: 16
+                    anchors.rightMargin: 8
+                    anchors.topMargin: 4
+                    anchors.bottomMargin: 4
+                    spacing: 8
+
+                    TextField {
+                        id: inputField
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        placeholderText: "Type your note here..."
+                        font.pixelSize: 14
+                        placeholderTextColor: ColorsModule.Colors.on_surface_variant
+                        color: ColorsModule.Colors.on_surface
+                        background: Rectangle {
+                            color: "transparent"
+                        }
+
+                        onAccepted: {
+                            if (text.trim().length === 0) return
+                            Services.Notes.add(text)
+                            text = ""
+                        }
                     }
 
-                    onClicked: {
-                        if (inputField.text.trim().length > 0) {
-                            Services.Notes.add(inputField.text)
-                            inputField.text = ""
+                    Button {
+                        id: sendButton
+                        Layout.preferredWidth: 52
+                        Layout.preferredHeight: 52
+                        Layout.alignment: Qt.AlignVCenter
+                        enabled: inputField.text.trim().length > 0
+                        opacity: enabled ? 1 : 0.4
+
+                        contentItem: Text {
+                            text: "↑"
+                            font.pixelSize: 22
+                            font.weight: Font.Bold
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            color: ColorsModule.Colors.on_primary
+                        }
+
+                        background: Rectangle {
+                            radius: 26
+                            color: sendButton.hovered && sendButton.enabled
+                                ? Qt.darker(ColorsModule.Colors.primary_container, 1.2)
+                                : ColorsModule.Colors.primary_container
+
+                            Rectangle {
+                                anchors.fill: parent
+                                radius: parent.radius
+                                color: "transparent"
+                                border.width: 2
+                                border.color: ColorsModule.Colors.primary
+                                opacity: 0.3
+                            }
+
+                            Behavior on color {
+                                ColorAnimation { duration: 200 }
+                            }
+                        }
+
+                        onClicked: {
+                            if (inputField.text.trim().length > 0) {
+                                Services.Notes.add(inputField.text)
+                                inputField.text = ""
+                            }
+                        }
+
+                        ToolTip {
+                            text: "Add note (Enter)"
+                            delay: 300
+                            visible: parent.hovered
+                            background: Rectangle {
+                                radius: 6
+                                color: ColorsModule.Colors.surface_container_highest
+                                border.width: 1
+                                border.color: ColorsModule.Colors.outline_variant
+                            }
                         }
                     }
                 }
@@ -318,22 +655,77 @@ Item {
         }
     }
 
-    /* CATEGORY DIALOG (unchanged except alignment fixes) */
     Dialog {
         id: categoryDialog
-        title: "Add New Category"
+        title: "Create New Category"
         modal: true
-        anchors.centerIn: parent
-        width: 320
+
+        x: (root.width - width) / 2
+        y: (root.height - height) / 2
+        width: 400
+        height: 220
+        parent: root
+
+        background: Rectangle {
+            radius: 28
+            color: ColorsModule.Colors.surface_container_lowest
+            border.color: ColorsModule.Colors.outline_variant
+            border.width: 1
+
+            Rectangle {
+                anchors.fill: parent
+                radius: parent.radius
+                color: "transparent"
+                border.width: 1
+                border.color: Qt.rgba(151, 204, 249, 0.1)
+            }
+        }
+
+        header: Rectangle {
+            height: 64
+            radius: 28
+            color: ColorsModule.Colors.surface_container_lowest
+
+            Rectangle {
+                width: 48
+                height: 4
+                anchors.top: parent.top
+                anchors.topMargin: 12
+                anchors.horizontalCenter: parent.horizontalCenter
+                radius: 2
+                color: ColorsModule.Colors.outline_variant
+                opacity: 0.3
+            }
+
+            Text {
+                anchors.centerIn: parent
+                text: categoryDialog.title
+                font.pixelSize: 20
+                font.weight: Font.Bold
+                color: ColorsModule.Colors.on_surface
+            }
+        }
 
         ColumnLayout {
             anchors.fill: parent
-            spacing: 16
+            anchors.margins: 24
+            spacing: 24
 
             TextField {
                 id: categoryInput
                 Layout.fillWidth: true
-                placeholderText: "e.g., Work, Personal, Ideas..."
+                placeholderText: "Enter category name..."
+                font.pixelSize: 14
+                focus: true
+
+                background: Rectangle {
+                    radius: 14
+                    color: ColorsModule.Colors.surface_container_high
+                    border.color: categoryInput.activeFocus
+                        ? ColorsModule.Colors.primary
+                        : ColorsModule.Colors.outline_variant
+                    border.width: 2
+                }
 
                 onAccepted: {
                     if (text.trim().length > 0) {
@@ -351,6 +743,26 @@ Item {
                 Button {
                     text: "Cancel"
                     Layout.fillWidth: true
+                    Layout.preferredHeight: 48
+
+                    background: Rectangle {
+                        radius: 14
+                        color: parent.hovered
+                            ? ColorsModule.Colors.surface_container_high
+                            : "transparent"
+                        border.width: 1
+                        border.color: ColorsModule.Colors.outline_variant
+                    }
+
+                    contentItem: Text {
+                        text: parent.text
+                        color: ColorsModule.Colors.on_surface
+                        font.pixelSize: 14
+                        font.weight: Font.Medium
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
                     onClicked: {
                         categoryDialog.close()
                         categoryInput.text = ""
@@ -358,8 +770,30 @@ Item {
                 }
 
                 Button {
-                    text: "Add"
+                    text: "Create"
                     Layout.fillWidth: true
+                    Layout.preferredHeight: 48
+                    enabled: categoryInput.text.trim().length > 0
+
+                    background: Rectangle {
+                        radius: 14
+                        color: parent.hovered && parent.enabled
+                            ? Qt.darker(ColorsModule.Colors.primary_container, 1.2)
+                            : ColorsModule.Colors.primary_container
+                        border.width: 2
+                        border.color: ColorsModule.Colors.primary
+                        opacity: 0.3
+                    }
+
+                    contentItem: Text {
+                        text: parent.text
+                        color: ColorsModule.Colors.on_primary_container
+                        font.pixelSize: 14
+                        font.weight: Font.Bold
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                    }
+
                     onClicked: {
                         if (categoryInput.text.trim().length > 0) {
                             Services.Notes.addCategory(categoryInput.text.trim())
