@@ -65,7 +65,6 @@ Item {
             anchors.margins: 24
             spacing: 16
 
-            /* FIXED HEADER */
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 56
@@ -75,7 +74,6 @@ Item {
                 border.color: ColorsModule.Colors.outline_variant
                 opacity: 0.8
 
-                // Subtle shadow effect
                 Rectangle {
                     anchors.fill: parent
                     radius: parent.radius
@@ -90,7 +88,6 @@ Item {
                     anchors.rightMargin: 16
                     spacing: 16
 
-                    // FIXED: Use RowLayout with proper vertical centering instead of nested ColumnLayout
                     Text {
                         text: "Quick Notes"
                         font.pixelSize: 18
@@ -101,7 +98,6 @@ Item {
 
                     Item { Layout.fillWidth: true }
 
-                    // Notes counter with enhanced styling
                     Rectangle {
                         Layout.preferredHeight: 36
                         Layout.preferredWidth: Math.max(36, countText.contentWidth + 24)
@@ -115,7 +111,6 @@ Item {
                             NumberAnimation { duration: 200 }
                         }
 
-                        // Inner accent
                         Rectangle {
                             anchors.fill: parent
                             radius: parent.radius
@@ -136,7 +131,6 @@ Item {
                         }
                     }
 
-                    // Enhanced add category button
                     Button {
                         id: addCategoryBtn
                         Layout.preferredWidth: 36
@@ -159,7 +153,6 @@ Item {
                                 ? Qt.darker(ColorsModule.Colors.primary_container, 1.2)
                                 : ColorsModule.Colors.primary_container
 
-                            // Accent border
                             Rectangle {
                                 anchors.fill: parent
                                 radius: parent.radius
@@ -190,7 +183,6 @@ Item {
                 }
             }
 
-            /* ENHANCED CATEGORY TABS */
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 44
@@ -228,7 +220,6 @@ Item {
                                         ? ColorsModule.Colors.surface_container_highest
                                         : ColorsModule.Colors.surface_container
 
-                                // Active tab accent
                                 Rectangle {
                                     anchors.fill: parent
                                     radius: parent.radius
@@ -238,7 +229,6 @@ Item {
                                     opacity: 0.5
                                 }
 
-                                // Hover effect
                                 scale: mouseArea.containsMouse ? 1.05 : 1.0
                                 z: mouseArea.containsMouse ? 1 : 0
                                 Behavior on scale {
@@ -320,7 +310,6 @@ Item {
                 }
             }
 
-            /* ENHANCED NOTES LIST */
             Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -329,7 +318,6 @@ Item {
                 border.width: 1
                 border.color: ColorsModule.Colors.outline_variant
 
-                // Container shadow effect
                 Rectangle {
                     anchors.fill: parent
                     radius: parent.radius
@@ -347,7 +335,6 @@ Item {
                     ColumnLayout {
                         width: parent.width - 20
                         spacing: 12
-                        anchors.margins: 12
 
                         Repeater {
                             model: Services.Notes.getNotesForCategory(
@@ -363,7 +350,6 @@ Item {
                                 radius: 16
                                 color: ColorsModule.Colors.surface_container_high
 
-                                // Card border and shadow
                                 Rectangle {
                                     anchors.fill: parent
                                     radius: parent.radius
@@ -375,7 +361,6 @@ Item {
                                     opacity: noteMouseArea.containsMouse ? 0.3 : 0.1
                                 }
 
-                                // Hover effect
                                 scale: noteMouseArea.containsMouse ? 1.02 : 1.0
                                 z: noteMouseArea.containsMouse ? 1 : 0
 
@@ -395,16 +380,14 @@ Item {
                                     anchors.margins: 20
                                     spacing: 16
 
-                                    // Enhanced note indicator with animation
                                     Rectangle {
                                         id: noteIndicator
-                                        Layout.preferredWidth: 12
-                                        Layout.preferredHeight: 12
-                                        Layout.alignment: Qt.AlignTop
+                                        Layout.preferredWidth: 6
+                                        Layout.preferredHeight: 6
+                                        Layout.alignment: Qt.AlignCenter
                                         radius: 6
                                         color: ColorsModule.Colors.primary
 
-                                        // Size pulse animation
                                         SequentialAnimation on scale {
                                             loops: Animation.Infinite
                                             running: true
@@ -413,7 +396,6 @@ Item {
                                         }
                                     }
 
-                                    // Enhanced note content
                                     ColumnLayout {
                                         spacing: 6
                                         Layout.fillWidth: true
@@ -431,7 +413,6 @@ Item {
                                         }
                                     }
 
-                                    // FIXED: Copy to clipboard button
                                     Button {
                                         id: copyBtn
                                         Layout.preferredWidth: 32
@@ -717,6 +698,8 @@ Item {
                 placeholderText: "Enter category name..."
                 font.pixelSize: 14
                 focus: true
+                color: ColorsModule.Colors.on_surface
+                placeholderTextColor:ColorsModule.Colors.on_surface
 
                 background: Rectangle {
                     radius: 14
